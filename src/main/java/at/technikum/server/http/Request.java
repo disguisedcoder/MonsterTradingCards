@@ -9,7 +9,7 @@ public class Request {
 
     private String path;
 
-    private Map<String, String> header;
+    private final Map<String, String> header;
 
     private String body;
 

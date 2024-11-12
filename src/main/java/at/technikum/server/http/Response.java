@@ -2,6 +2,7 @@ package at.technikum.server.http;
 
 public class Response {
 
+
     // fields, private
     private Status status;
 
