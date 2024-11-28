@@ -5,18 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cdb836e-8229-4d1b-a8d9-3d0637347296" name="Changes" comment="first projekt">
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/EntityNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/InvalidBodyException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/JsonParserException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Route.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MTCG_Checklist_intermediate.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MTCG_Specification.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MonsterTradingCard.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/MCTG_Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/DTO/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/Card.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/Element.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/MonsterCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/MonsterType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/SpellCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/user/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/AuthenticationFailedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/ControllerNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/UserAlreadyExistsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/UserNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/Card.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/User.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Status.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +41,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Exception" />
+        <option value="editable-svg" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -59,30 +75,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.at.technikum.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.HttpRequestParserTest.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.testRunning&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.at.technikum.Main.executor": "Run",
+    "JUnit.HttpRequestParserTest (1).executor": "Run",
+    "JUnit.HttpRequestParserTest.executor": "Run",
+    "JUnit.HttpResponseFormatterTest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/janse/IdeaProjects/SWEN1/swen1-bif-ws2024-main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.testRunning",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="at.technikum" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.at.technikum.Main">
+  <component name="RunManager" selected="JUnit.HttpResponseFormatterTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="Demo" />
@@ -98,13 +117,28 @@
     </configuration>
     <configuration name="at.technikum.Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="at.technikum.Main" />
-      <module name="Demo" />
+      <module name="http-server-and-app" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="at.technikum.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HttpRequestParserTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="http-server-and-app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.technikum.server.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="at.technikum.server.util" />
+      <option name="MAIN_CLASS_NAME" value="at.technikum.server.util.HttpRequestParserTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -124,8 +158,25 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="HttpResponseFormatterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="http-server-and-app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="at.technikum.server.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="at.technikum.server.util" />
+      <option name="MAIN_CLASS_NAME" value="at.technikum.server.util.HttpResponseFormatterTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.HttpResponseFormatterTest" />
+        <item itemvalue="JUnit.HttpRequestParserTest (1)" />
         <item itemvalue="Application.at.technikum.Main" />
         <item itemvalue="JUnit.HttpRequestParserTest" />
         <item itemvalue="Application.Main" />
@@ -135,8 +186,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
       </set>
     </attachedChunks>
   </component>
@@ -157,6 +208,8 @@
       <workItem from="1732745912410" duration="594000" />
       <workItem from="1732748175222" duration="1962000" />
       <workItem from="1732750716417" duration="1901000" />
+      <workItem from="1732816788795" duration="776000" />
+      <workItem from="1732817576905" duration="14468000" />
     </task>
     <task id="LOCAL-00001" summary="first projekt">
       <option name="closed" value="true" />

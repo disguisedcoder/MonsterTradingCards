@@ -6,13 +6,9 @@ import java.util.Map;
 public class Request {
 
     private Method method;
-
     private String path;
-
     private final Map<String, String> header;
-
     private String body;
-
     private String http;
 
     public Method getMethod() {

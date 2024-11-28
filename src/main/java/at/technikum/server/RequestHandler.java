@@ -8,6 +8,7 @@ import at.technikum.server.util.HttpSocket;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 public class RequestHandler {
 
@@ -38,6 +39,9 @@ public class RequestHandler {
         try (HttpSocket httpSocket = new HttpSocket(this.socket)) {
             String http = httpSocket.read();
             Request request = httpRequestParser.parse(http);
+
+            System.out.printf("%s %s %s \r\n", LocalDateTime.now(), request.getMethod(), request.getPath());
+
 
             Response response = this.application.handle(request);
 
