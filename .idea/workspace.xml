@@ -4,34 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7cdb836e-8229-4d1b-a8d9-3d0637347296" name="Changes" comment="first projekt">
-      <change afterPath="$PROJECT_DIR$/MTCG_Checklist_intermediate.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MTCG_Specification.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MonsterTradingCard.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/MCTG_Application.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/DTO/UserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/Element.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/MonsterCard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/MonsterType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/card/SpellCard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/user/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/AuthenticationFailedException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/ControllerNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/UserAlreadyExistsException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/UserNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7cdb836e-8229-4d1b-a8d9-3d0637347296" name="Changes" comment="intermediate check">
+      <change afterPath="$PROJECT_DIR$/src/main/UML.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/Card.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MonsterTradingCard.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +26,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -84,7 +66,7 @@
     "JUnit.HttpResponseFormatterTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "SWEN1__halbzeit",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/janse/IdeaProjects/SWEN1/swen1-bif-ws2024-main",
     "node.js.detected.package.eslint": "true",
@@ -92,7 +74,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.testRunning",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -209,7 +191,8 @@
       <workItem from="1732748175222" duration="1962000" />
       <workItem from="1732750716417" duration="1901000" />
       <workItem from="1732816788795" duration="776000" />
-      <workItem from="1732817576905" duration="14468000" />
+      <workItem from="1732817576905" duration="14698000" />
+      <workItem from="1732834035164" duration="522000" />
     </task>
     <task id="LOCAL-00001" summary="first projekt">
       <option name="closed" value="true" />
@@ -243,7 +226,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732709095215</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="intermediate check">
+      <option name="closed" value="true" />
+      <created>1732833873885</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1732833873885</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +242,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first projekt" />
-    <option name="LAST_COMMIT_MESSAGE" value="first projekt" />
+    <MESSAGE value="intermediate check" />
+    <option name="LAST_COMMIT_MESSAGE" value="intermediate check" />
   </component>
 </project>

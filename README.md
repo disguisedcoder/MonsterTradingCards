@@ -3,7 +3,7 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
+- [UML](#uml)
 - [Error Handling](#error-handling)
 - [Author](#author)
 
@@ -75,8 +75,57 @@ src/
 ```
 
 ---
+## UML Definition
+class Controller {
++ handle(Request): Response
++ fromBody()
++ json()
+}
+
+class UserController {
++ register(Request): Response
++ login(Request): Response
+}
+Controller <|-- UserController
+
+class UserService {
++ createUser(User): UserDTO
++ login(UserDTO): String
+}
+UserController --> UserService
+
+class UserRepository {
+- users: Map<String, User>
++ save(User)
++ findByUsername(String): User
+}
+UserService --> UserRepository
+
+class User {
+- username: String
+- password: String
+- token: String
+- coins: int
+- elo: int
+- stack: List<Card>
+- deck: List<Card
+}
+UserService --> User
+
+class UserDTO {
+- username: String
+- elo: int
+- coins: int
+}
+User --> UserDTO
+
+class Card {
+- name: String
+- damage: int
+}
 
 
+it is still not finished, but these are my first thoughts. Card have more attributes
 
 
 ---
