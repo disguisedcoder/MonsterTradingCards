@@ -1,15 +1,29 @@
 package at.technikum.application.TradingCards.router;
 
-import java.awt.*;
-import java.util.Collection;
+import at.technikum.application.TradingCards.controller.Controller;
+import java.util.*;
 
 public class Router {
 
-    Collection
+        private final List<Route> routes;
 
-    public Controller get Controller(String path){
+        public Router() {
+            this.routes = new ArrayList<>();
+        }
 
+        public Controller getController(String path) {
+            for (Route route: this.routes) {
+                if (!path.startsWith(route.getRoute())) {
+                    continue;
+                }
 
-    }
+                return route.getController();
+            }
 
+            throw new ControllerNotFoundException(path);
+        }
+
+        public void addRoute(String route, Controller controller) {
+            this.routes.add(new Route(route, controller));
+        }
 }

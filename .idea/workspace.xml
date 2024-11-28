@@ -5,22 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cdb836e-8229-4d1b-a8d9-3d0637347296" name="Changes" comment="first projekt">
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/echo/EchoApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/html/SimpleHtmlApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/NoHttpStatusException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/at/technikum/server/util/HttpResponseFormatterTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/RequestHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Response.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/Card.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/enitity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/EntityNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/InvalidBodyException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/exception/JsonParserException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Route.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/router/Router.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/http/Status.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpRequestParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpResponseFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpResponseFormatter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/server/util/HttpSocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +47,9 @@
     &quot;accountId&quot;: &quot;162c562a-2795-47c8-b240-a7f3ee48aa0d&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -154,6 +153,10 @@
       <workItem from="1730901481916" duration="11159000" />
       <workItem from="1731424272753" duration="11869000" />
       <workItem from="1732018720926" duration="16275000" />
+      <workItem from="1732709004508" duration="7267000" />
+      <workItem from="1732745912410" duration="594000" />
+      <workItem from="1732748175222" duration="1962000" />
+      <workItem from="1732750716417" duration="1901000" />
     </task>
     <task id="LOCAL-00001" summary="first projekt">
       <option name="closed" value="true" />
@@ -171,7 +174,23 @@
       <option name="project" value="LOCAL" />
       <updated>1731424847557</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="first projekt">
+      <option name="closed" value="true" />
+      <created>1732709064301</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1732709064301</updated>
+    </task>
+    <task id="LOCAL-00004" summary="first projekt">
+      <option name="closed" value="true" />
+      <created>1732709095215</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1732709095215</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
