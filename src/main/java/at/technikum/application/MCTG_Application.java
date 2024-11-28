@@ -34,8 +34,8 @@ public class MCTG_Application implements Application {
     }
 
     private void initRoutes(){
-        this.router.addRoute("sessions", new UserController());
-        this.router.addRoute("users", new UserController());
+        this.router.addRoute("/sessions", new UserController());
+        this.router.addRoute("/users", new UserController());
 
     }
 

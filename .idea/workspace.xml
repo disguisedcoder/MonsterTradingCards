@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cdb836e-8229-4d1b-a8d9-3d0637347296" name="Changes" comment="intermediate check">
-      <change afterPath="$PROJECT_DIR$/src/main/UML.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MonsterTradingCard.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/MCTG_Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/MCTG_Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/technikum/application/TradingCards/entity/user/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +82,7 @@
       <recent name="at.technikum" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.HttpResponseFormatterTest">
+  <component name="RunManager" selected="Application.at.technikum.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="Demo" />
@@ -157,9 +156,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.at.technikum.Main" />
         <item itemvalue="JUnit.HttpResponseFormatterTest" />
         <item itemvalue="JUnit.HttpRequestParserTest (1)" />
-        <item itemvalue="Application.at.technikum.Main" />
         <item itemvalue="JUnit.HttpRequestParserTest" />
         <item itemvalue="Application.Main" />
       </list>
@@ -192,7 +191,8 @@
       <workItem from="1732750716417" duration="1901000" />
       <workItem from="1732816788795" duration="776000" />
       <workItem from="1732817576905" duration="14698000" />
-      <workItem from="1732834035164" duration="522000" />
+      <workItem from="1732834035164" duration="542000" />
+      <workItem from="1732834742757" duration="1977000" />
     </task>
     <task id="LOCAL-00001" summary="first projekt">
       <option name="closed" value="true" />
@@ -234,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732833873885</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="intermediate check">
+      <option name="closed" value="true" />
+      <created>1732834574300</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1732834574300</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

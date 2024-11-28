@@ -16,6 +16,9 @@ public class User {
     private List<Card> stack;
     private List<Card> deck;
 
+    public User(){
+    }
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
