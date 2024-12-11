@@ -25,7 +25,7 @@ public class UserController extends Controller {
 
         if ("/users".equals(path) && "POST".equalsIgnoreCase(method)) {
             return handleRegister(request);
-        } else if ("/users/login".equals(path) && "POST".equalsIgnoreCase(method)) {
+        } else if ("/sessions".equals(path) && "POST".equalsIgnoreCase(method)) {
             return handleLogin(request);
         } else {
             return json(Status.NOT_FOUND, "Endpoint not found");
