@@ -1,18 +1,14 @@
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:15
-    container_name: postgres_db
-    ports:
-      - "5432:5432" # Mappt den PostgreSQL-Port 5432 auf deinen lokalen Port 5432
-    environment:
-      POSTGRES_USER: mtcg       # Setzt den PostgreSQL-Benutzer
-      POSTGRES_PASSWORD: mtcg # Setzt das PostgreSQL-Passwort
-      POSTGRES_DB: mctg_database       # Erstellt automatisch diese Datenbank
+  db:
+    image: postgres:17
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persistiert die Daten
-    restart: always
+      - swen1-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: swen1
+      POSTGRES_USER: swen1
+      POSTGRES_DB: swen1
+    ports:
+      - "5432:5432"
 
 volumes:
-  postgres_data:
+  swen1-db:
