@@ -52,6 +52,8 @@ public class UserController extends Controller {
         try {
             // Parse request body to UserDTO object
             UserDTO userDTO = fromBody(request.getBody(), UserDTO.class);
+            // Debug-Ausgabe
+            System.out.println("Parsed UserDTO: username=" + userDTO.getUsername() + ", password=" + userDTO.getPassword());
             String token = userService.authenticate(userDTO);
             response.setStatus(Status.OK);
             response.setBody(token);

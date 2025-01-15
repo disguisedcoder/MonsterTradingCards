@@ -6,6 +6,8 @@ import at.technikum.application.TradingCards.exception.AuthenticationFailedExcep
 import at.technikum.application.TradingCards.exception.UserNotFoundException;
 import at.technikum.application.TradingCards.repository.UserRepository;
 
+import java.util.Collection;
+
 
 public class UserService {
     private final UserRepository userRepository = new UserRepository();
@@ -17,9 +19,9 @@ public class UserService {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }
-
-        // Save the User
+        System.out.println("Registering user: " + user.getUsername());
         userRepository.save(user);
+
 
         // Convert User to UserDTO and return
         return new UserDTO(
@@ -34,6 +36,8 @@ public class UserService {
      * Authenticates a user by their username and password and generates a token.
      */
     public String authenticate(UserDTO userDTO) {
+        System.out.println(userDTO.getUsername());
+
         User user = userRepository.findByUsername(userDTO.getUsername());
         if (user == null) {
             throw new UserNotFoundException("User not found");
