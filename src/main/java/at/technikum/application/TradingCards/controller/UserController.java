@@ -14,8 +14,9 @@ public class UserController extends Controller {
 
     private final UserService userService;
 
-    public UserController() {
-        this.userService = new UserService();
+    public UserController(UserService userService) {
+        super();
+        this.userService = userService;
     }
 
     @Override
@@ -43,7 +44,10 @@ public class UserController extends Controller {
         } catch (UserAlreadyExistsException e) {
             response.setStatus(Status.CONFLICT);
             response.setBody(e.getMessage());
-                }
+        } catch (IllegalArgumentException e) {
+            response.setStatus(Status.CONFLICT);
+            response.setBody("Invalid data: " + e.getMessage());
+        }
         return response;
     }
 
@@ -54,6 +58,8 @@ public class UserController extends Controller {
             UserDTO userDTO = fromBody(request.getBody(), UserDTO.class);
             // Debug-Ausgabe
             System.out.println("Parsed UserDTO: username=" + userDTO.getUsername() + ", password=" + userDTO.getPassword());
+
+            // Benutzer authentifizieren
             String token = userService.authenticate(userDTO);
             response.setStatus(Status.OK);
             response.setBody(token);
@@ -66,5 +72,4 @@ public class UserController extends Controller {
         }
         return response;
     }
-
 }
