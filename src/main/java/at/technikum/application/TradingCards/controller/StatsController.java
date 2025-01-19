@@ -35,8 +35,7 @@ public class StatsController extends Controller {
     private Response handleGetStats(Request request) {
         try {
             String token = userService.validateToken(request.getHeader("Authorization"));
-
-            var stats = statsService.getStats(username);
+            var stats = statsService.getStats(token);
             return json(Status.OK, stats);
         } catch (Exception e) {
             return json(Status.UNAUTHORIZED, e.getMessage());

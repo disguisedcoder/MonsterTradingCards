@@ -3,9 +3,12 @@ package at.technikum.application.TradingCards.service;
 import at.technikum.application.TradingCards.entity.card.Card;
 import at.technikum.application.TradingCards.entity.user.User;
 import at.technikum.application.TradingCards.repository.CardRepository;
+import at.technikum.application.TradingCards.repository.UserRepository;
 import at.technikum.application.TradingCards.repository.StatsRepository;
+import at.technikum.application.TradingCards.repository.DeckRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,15 +19,19 @@ public class BattleService {
     private final BlockingQueue<User> requestQueue = new LinkedBlockingQueue<>();
     private final ConcurrentHashMap<String, String> battleResults = new ConcurrentHashMap<>();
     private final CardRepository cardRepository;
+    private final UserRepository userRepository;
     private final StatsRepository statsRepository;
+    private final DeckRepository deckRepository;
 
-    public BattleService(CardRepository cardRepository, StatsRepository statsRepository) {
+    public BattleService(CardRepository cardRepository, StatsRepository statsRepository, UserRepository userRepository,DeckRepository deckRepository) {
         this.cardRepository = cardRepository;
         this.statsRepository = statsRepository;
+        this.userRepository = userRepository;
+        this.deckRepository = deckRepository;
     }
 
     public void addPlayerToQueue(String token) {
-        User user = cardRepository.findUserByToken(token);
+        User user = userRepository.findByToken(token);
 
         if (user == null) {
             throw new IllegalArgumentException("Invalid user token.");
@@ -52,7 +59,7 @@ public class BattleService {
     }
 
     public String getBattleResult(String token) {
-        User user = cardRepository.findUserByToken(token);
+        User user = userRepository.findByToken(token);
 
         if (user == null) {
             throw new IllegalArgumentException("Invalid user token.");
@@ -132,12 +139,16 @@ public class BattleService {
     private ArrayList<Card> loadDeck(User user) {
         ArrayList<Card> deck = new ArrayList<>();
 
-        // Stelle sicher, dass die Deck-Liste nicht null ist
-        if (user.getDeck() == null || user.getDeck().isEmpty()) {
+        // Abrufen der Karten-IDs aus dem Deck-Repository
+        List<String> userDeck = deckRepository.getDeck(user.getUsername());
+
+        // Überprüfen, ob das Deck leer ist oder null zurückgegeben wurde
+        if (userDeck == null || userDeck.isEmpty()) {
             throw new IllegalArgumentException("The user's deck is empty or not initialized.");
         }
 
-        for (String cardId : user.getDeck()) {
+        // Laden der Karten basierend auf den IDs
+        for (String cardId : userDeck) {
             Card card = cardRepository.findById(cardId);
 
             if (card == null) {
@@ -149,6 +160,7 @@ public class BattleService {
 
         return deck;
     }
+
 
 
     private void adjustElo(User user1, User user2, User winner) {

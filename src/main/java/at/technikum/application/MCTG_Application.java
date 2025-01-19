@@ -44,13 +44,14 @@ public class MCTG_Application implements Application {
         CardRepository cardRepository = new CardDbRepository(connectionPool);
         PackageRepository packageRepository = new PackageDbRepository(connectionPool);
         DeckRepository deckRepository = new DeckDbRepository(connectionPool);
+        StatsRepository statsRepository = new StatsDbRepository(connectionPool);
 
 
         UserService userService = new UserService(userRepository);
         CardService cardService = new CardService(cardRepository,userRepository);
         PackageService packageService = new PackageService(packageRepository, userRepository,cardService);
         DeckService deckService = new DeckService(deckRepository,cardService,cardRepository);
-        BattleService battleService = new BattleService(cardRepository);
+        BattleService battleService = new BattleService(cardRepository,statsRepository,userRepository,deckRepository);
 
         PackageController packageController = new PackageController(packageService,userService);
         UserController userController = new UserController(userService);
@@ -68,6 +69,7 @@ public class MCTG_Application implements Application {
         this.router.addRoute("/transactions/packages", packageController);
         this.router.addRoute("/cards", cardController);
         this.router.addRoute("/deck", deckController);
+        this.router.addRoute("/battle", battleController);
 
 
 
