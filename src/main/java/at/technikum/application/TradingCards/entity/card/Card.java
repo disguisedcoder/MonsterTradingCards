@@ -1,6 +1,9 @@
 package at.technikum.application.TradingCards.entity.card;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Card {
     private final String id;
     private final String name;
@@ -9,27 +12,69 @@ public class Card {
     private final boolean isMonster; // true, wenn es eine Monsterkarte ist
     private final boolean isSpell;   // true, wenn es eine Zauberkarte ist
     private final MonsterType monsterType; // Nur für Monsterkarten relevant
+    private int package_id;
+    private String username;
 
-    // Konstruktor für Monsterkarten
-    public Card(String id, String name, double damage, Element element, MonsterType monsterType) {
+
+    // Constructor for Jackson deserialization
+    @JsonCreator
+    public Card(
+            @JsonProperty("ID") String id,
+            @JsonProperty("name") String name,
+            @JsonProperty("damage") double damage
+    ) {
         this.id = id;
         this.name = name;
         this.damage = damage;
-        this.element = element;
-        this.isMonster = true;
-        this.isSpell = false;
-        this.monsterType = monsterType;
+        this.element = determineElement(name);
+        this.isSpell = name.contains("Spell");
+        this.isMonster = !this.isSpell;
+        this.monsterType = determineMonsterType(name);
+    }
+    private Element determineElement(String name) {
+        if (name.toLowerCase().contains("water")) {
+            return Element.WATER;
+        } else if (name.toLowerCase().contains("fire")) {
+            return Element.FIRE;
+        } else {
+            return Element.NORMAL;
+        }
     }
 
-    // Konstruktor für Zauberkarten
-    public Card(String id, String name, double damage, Element element) {
-        this.id = id;
-        this.name = name;
-        this.damage = damage;
-        this.element = element;
-        this.isMonster = false;
-        this.isSpell = true;
-        this.monsterType = null; // Keine MonsterType für Zauberkarten
+    public int getPackage_id(){
+        return package_id;
+    }
+
+    public void setPackage_id(int packageId) {
+        this.package_id = packageId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private MonsterType determineMonsterType(String name) {
+        if (name.toLowerCase().contains("goblin")) {
+            return MonsterType.GOBLIN;
+        } else if (name.toLowerCase().contains("dragon")) {
+            return MonsterType.DRAGON;
+        } else if (name.toLowerCase().contains("ork")) {
+            return MonsterType.ORK;
+        } else if (name.toLowerCase().contains("wizard")) {
+            return MonsterType.WIZARD;
+        } else if (name.toLowerCase().contains("knight")) {
+            return MonsterType.KNIGHT;
+        } else if (name.toLowerCase().contains("kraken")) {
+            return MonsterType.KRAKEN;
+        } else if (name.toLowerCase().contains("elf")) {
+            return MonsterType.ELVE;
+        } else {
+            return null; // Standardwert
+        }
     }
 
     // Berechnung des Schadens mit Element-Effektivität

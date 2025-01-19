@@ -5,6 +5,7 @@ import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 import at.technikum.server.http.Status;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,6 +21,13 @@ public abstract class Controller {
 
     public abstract Response handle(Request request);
 
+    protected <T> T fromBody(String body, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(body, typeReference);
+        } catch (JsonProcessingException e) {
+            throw new InvalidBodyException(e);
+        }
+    }
 
     protected <T> T fromBody(String body, Class<T> type) {
         try {

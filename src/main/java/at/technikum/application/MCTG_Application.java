@@ -1,13 +1,17 @@
 package at.technikum.application;
 
+import at.technikum.application.TradingCards.controller.CardController;
 import at.technikum.application.TradingCards.controller.Controller;
+import at.technikum.application.TradingCards.controller.PackageController;
 import at.technikum.application.TradingCards.controller.UserController;
 import at.technikum.application.TradingCards.exception.ControllerNotFoundException;
-import at.technikum.application.TradingCards.repository.UserDbRepository;
-import at.technikum.application.TradingCards.repository.UserRepository;
+import at.technikum.application.TradingCards.repository.*;
 import at.technikum.application.TradingCards.router.Router;
+import at.technikum.application.TradingCards.service.CardService;
+import at.technikum.application.TradingCards.service.PackageService;
 import at.technikum.application.TradingCards.service.UserService;
 import at.technikum.application.data.ConnectionPool;
+import at.technikum.application.data.DatabaseCleaner;
 import at.technikum.server.Application;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
@@ -34,6 +38,7 @@ public class MCTG_Application implements Application {
             response.setHeader("Content-Type", "text/html");
             response.setBody("<h1> " + e.getMessage() +  "</h1>");
         }
+        System.out.println("Response: " + response.getBody());
         return response;
     }
 
@@ -41,11 +46,30 @@ public class MCTG_Application implements Application {
         ConnectionPool connectionPool = new ConnectionPool();
 
         UserRepository userRepository = new UserDbRepository(connectionPool);
+        CardRepository cardRepository = new CardDbRepository(connectionPool);
+        PackageRepository packageRepository = new PackageDbRepository(connectionPool);
+
+
         UserService userService = new UserService(userRepository);
+        CardService cardService = new CardService(cardRepository,userRepository);
+        PackageService packageService = new PackageService(packageRepository, userRepository,cardService);
+
+
+        PackageController packageController = new PackageController(packageService,userService);
         UserController userController = new UserController(userService);
+        CardController cardController = new CardController(cardService,userService);
+
+        DatabaseCleaner databaseCleaner = new DatabaseCleaner(connectionPool);
+
+        databaseCleaner.clearAllTables(); // This will clear all entries in the database
 
         this.router.addRoute("/sessions", userController);
         this.router.addRoute("/users", userController);
+        this.router.addRoute("/packages", packageController);
+        this.router.addRoute("/transactions/packages", packageController);
+        this.router.addRoute("/cards", cardController);
+
+
 
     }
 

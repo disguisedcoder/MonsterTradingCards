@@ -2,6 +2,7 @@ package at.technikum.application.TradingCards.entity.user;
 
 
 import at.technikum.application.TradingCards.entity.card.Card;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ public class User {
     public User(){
     }
 
-    public User(String username, String password) {
+    public User(@JsonProperty("Username") String username,
+                @JsonProperty("Password") String password) {
         this.username = username;
         this.password = password;
         this.token = generateToken();

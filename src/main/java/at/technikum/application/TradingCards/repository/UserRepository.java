@@ -15,4 +15,7 @@ public interface UserRepository {
     User findByToken(String token);
 
     boolean delete(User user);
+
+    boolean update(User user); // New method for updating users
+
 }

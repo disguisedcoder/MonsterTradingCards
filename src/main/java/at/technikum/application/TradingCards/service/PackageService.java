@@ -2,30 +2,40 @@ package at.technikum.application.TradingCards.service;
 
 import at.technikum.application.TradingCards.entity.card.Card;
 import at.technikum.application.TradingCards.entity.packages.Package;
+import at.technikum.application.TradingCards.entity.user.User;
 import at.technikum.application.TradingCards.repository.PackageRepository;
-import at.technikum.application.TradingCards.repository.UserDbRepository;
+import at.technikum.application.TradingCards.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PackageService {
     private final PackageRepository packageRepository;
-    private final UserDbRepository userRepository;
+    private final UserRepository userRepository;
+    private final CardService cardService;
 
-    public PackageService(PackageRepository packageRepository, UserDbRepository userRepository) {
+
+    public PackageService(PackageRepository packageRepository, UserRepository userRepository, CardService cardService) {
         this.packageRepository = packageRepository;
         this.userRepository = userRepository;
+        this.cardService = cardService;
     }
 
     public void createPackage(List<Card> cards) {
         if (cards == null || cards.size() != 5) {
             throw new IllegalArgumentException("A package must contain exactly 5 cards.");
         }
-        packageRepository.save(cards); // Speichert das Paket und weist eine ID zu
+        int packageId = packageRepository.save();
+        // Assign the package ID to the cards
+        cards.forEach(card -> card.setPackage_id(packageId));
+
+        // Save the cards
+        cardService.saveCards(cards);
+
+
     }
 
     public void acquirePackage(String token) {
-        var user = userRepository.findByToken(token);
+        User user = userRepository.findByToken(token);
         if (user == null) {
             throw new IllegalArgumentException("Invalid user token.");
         }
@@ -33,14 +43,17 @@ public class PackageService {
             throw new IllegalStateException("Not enough coins to acquire a package.");
         }
 
-        Package pack = packageRepository.acquirePackage();
+        Package pack = packageRepository.acquirePackage(user.getUsername());
         if (pack == null) {
             throw new IllegalStateException("No packages available.");
         }
 
         user.setCoins(user.getCoins() - 5);
-        List<Card> updatedStack = new ArrayList<>(user.getStack());
+        List<Card> updatedStack = user.getStack();
         updatedStack.addAll(pack.getCards());
-        user.setStack(updatedStack); // Stack aktualisieren    }
+        user.setStack(updatedStack);
+        userRepository.update(user);// Stack aktualisieren
+
     }
+
 }

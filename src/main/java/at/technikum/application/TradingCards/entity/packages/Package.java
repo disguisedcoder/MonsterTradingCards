@@ -5,13 +5,10 @@ import at.technikum.application.TradingCards.entity.card.Card;
 import java.util.List;
 
 public class Package {
-    private final int id;
-    private final List<Card> cards;
+    private int id;
+    private List<Card> cards;
 
     public Package(int id, List<Card> cards) {
-        if (cards == null || cards.size() != 5) {
-            throw new IllegalArgumentException("A package must contain exactly 5 cards.");
-        }
         this.id = id;
         this.cards = cards;
     }
@@ -20,8 +17,16 @@ public class Package {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public List<Card> getCards() {
         return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     @Override

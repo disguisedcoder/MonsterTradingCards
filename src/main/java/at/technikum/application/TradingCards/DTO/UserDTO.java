@@ -1,5 +1,7 @@
 package at.technikum.application.TradingCards.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserDTO {
 
     private String username;
@@ -18,7 +20,8 @@ public class UserDTO {
         this.coins = coins;
     }
 
-    public UserDTO(String username, String password) {
+    public UserDTO(@JsonProperty("username") String username,
+                   @JsonProperty("password") String password) {
         this.username = username;
         this.password = password;
         this.elo = 0; // Standardwert für Elo

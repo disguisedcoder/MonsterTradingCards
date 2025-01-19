@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
-public class RequestHandler {
+public class RequestHandler implements Runnable{
 
     // [x] receive socket
     // [x] wrap socket in HttpSocket
@@ -32,6 +32,9 @@ public class RequestHandler {
         this.application = application;
     }
 
+    public void run() {
+        this.handle();
+    }
     public void handle() {
         HttpRequestParser httpRequestParser = new HttpRequestParser();
         HttpResponseFormatter httpResponseFormatter = new HttpResponseFormatter();
@@ -47,6 +50,7 @@ public class RequestHandler {
 
             http = httpResponseFormatter.format(response);
             httpSocket.write(http);
+
         } catch (IOException e) {
 
             // send standard error response

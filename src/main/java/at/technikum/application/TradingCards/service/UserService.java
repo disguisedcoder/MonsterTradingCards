@@ -56,4 +56,28 @@ public class UserService {
         // Token zurückgeben
         return user.getToken();
     }
+
+    public String validateToken(String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Unauthorized access: Invalid authorization header.");
+        }
+
+        String token = authorizationHeader.substring(7); // Extrahiere den Token
+        var user = userRepository.findByToken(token);
+        if (user == null) {
+            throw new IllegalArgumentException("Unauthorized access: Invalid token.");
+        }
+
+        return token;
+    }
+    public void validateAdmin(String authorizationHeader) {
+        String token = validateToken(authorizationHeader);
+        var user = userRepository.findByToken(token);
+
+        if (!"admin".equals(user.getUsername())) {
+            throw new IllegalArgumentException("Unauthorized access: Admin rights required.");
+        }
+    }
+
+
 }

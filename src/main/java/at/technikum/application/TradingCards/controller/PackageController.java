@@ -2,80 +2,84 @@ package at.technikum.application.TradingCards.controller;
 
 import at.technikum.application.TradingCards.entity.card.Card;
 import at.technikum.application.TradingCards.service.PackageService;
+import at.technikum.application.TradingCards.service.UserService;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 import at.technikum.server.http.Status;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.List;
 
 public class PackageController extends Controller {
 
     private final PackageService packageService;
+    private final UserService userService;
 
-    public PackageController(PackageService packageService) {
+    public PackageController(PackageService packageService, UserService userService) {
         this.packageService = packageService;
+        this.userService = userService;
     }
 
     @Override
     public Response handle(Request request) {
         String path = request.getPath();
-        String method = request.getMethod().name(); // Get the HTTP method as a string
+        String method = request.getMethod().name();
 
-        if ("/packages".equals(path) && "POST".equalsIgnoreCase(method)) {
-            return handleCreatePackage(request);
-        } else if ("/transactions/packages".equals(path) && "POST".equalsIgnoreCase(method)) {
-            return handleAcquirePackage(request);
-        } else {
-            return json(Status.NOT_FOUND, "Endpoint not found");
+        // Determine route
+        switch (path) {
+            case "/packages":
+                if ("POST".equalsIgnoreCase(method)) {
+                    return handleCreatePackage(request);
+                }
+                break;
+
+            case "/transactions/packages":
+                if ("POST".equalsIgnoreCase(method)) {
+                    return handleAcquirePackage(request);
+                }
+                break;
+
+            default:
+                return json(Status.NOT_FOUND, "Endpoint not found");
         }
+
+        return json(Status.NOT_FOUND, "Endpoint not found");
     }
 
     private Response handleCreatePackage(Request request) {
         try {
-            // Validate Authorization header
-            String authorization = request.getHeader("Authorization");
-            if (authorization == null || !authorization.equals("Bearer admin-mtcgToken")) {
-                return json(Status.UNAUTHORIZED, "Unauthorized access");
-            }
+            // Validate user authorization
+            String token = request.getHeader("Authorization");
+            userService.validateAdmin(token);
 
-            // Parse JSON body to a list of Card objects
-            List<Card> cards = fromBody(request.getBody(), List.class);
+            // Parse JSON body into a list of Card objects
+            List<Card> cards = fromBody(request.getBody(), new TypeReference<>() {});
 
             // Delegate package creation to the service
             packageService.createPackage(cards);
 
-            // Return success response
             return json(Status.CREATED, "Package created successfully");
-
         } catch (IllegalArgumentException e) {
-            // Konflikte wie falsche Eingabedaten oder fehlerhafte Struktur
-            return json(Status.CONFLICT, "Invalid package data: " + e.getMessage());
+            return json(Status.UNAUTHORIZED, e.getMessage());
         } catch (Exception e) {
-            // Unerwartete Fehler
             return json(Status.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
     }
 
     private Response handleAcquirePackage(Request request) {
         try {
-            // Validate Authorization header
-            String authorization = request.getHeader("Authorization");
-            if (authorization == null || !authorization.startsWith("Bearer ")) {
-                return json(Status.UNAUTHORIZED, "Unauthorized access");
-            }
+            // Validate user authorization and extract the token
+            String token = userService.validateToken(request.getHeader("Authorization"));
 
-            String token = authorization.substring(7); // Extract the token
-
+            // Delegate package acquisition to the service
             packageService.acquirePackage(token);
 
-            // Return success response
             return json(Status.CREATED, "Package acquired successfully");
-
+        } catch (IllegalArgumentException e) {
+            return json(Status.UNAUTHORIZED, e.getMessage());
         } catch (IllegalStateException e) {
-            // Konflikte wie keine Münzen oder keine Pakete verfügbar
             return json(Status.CONFLICT, e.getMessage());
         } catch (Exception e) {
-            // Unerwartete Fehler
             return json(Status.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
     }

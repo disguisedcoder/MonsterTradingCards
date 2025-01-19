@@ -1,5 +1,8 @@
 package at.technikum.application.TradingCards.repository;
 
+import at.technikum.application.TradingCards.entity.card.Card;
+import at.technikum.application.TradingCards.entity.card.Element;
+import at.technikum.application.TradingCards.entity.card.MonsterType;
 import at.technikum.application.TradingCards.entity.user.User;
 import at.technikum.application.data.ConnectionPool;
 
@@ -22,6 +25,10 @@ public class UserDbRepository implements UserRepository {
             "SELECT * FROM users";
     private static final String DELETE_USER =
             "DELETE FROM users WHERE username = ?";
+    private static final String UPDATE_USER =
+            "UPDATE users SET password = ?, token = ?, coins = ?, elo = ? WHERE username = ?";
+    private static final String SELECT_CARDS_FOR_USER =
+            "SELECT c.* FROM %s s INNER JOIN cards c ON s.card_id = c.id WHERE s.username = ?";
 
     private final ConnectionPool connectionPool;
 
@@ -112,16 +119,31 @@ public class UserDbRepository implements UserRepository {
         ) {
             preparedStatement.setString(1, user.getUsername());
             int rowsAffected = preparedStatement.executeUpdate();
-            return rowsAffected > 0; // Gibt true zurück, wenn mindestens eine Zeile betroffen ist
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error deleting user", e);
         }
     }
 
-    /**
-     * Mappt ein `ResultSet` zu einem `User`-Objekt.
-     */
+    @Override
+    public boolean update(User user) {
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)
+        ) {
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setString(2, user.getToken());
+            preparedStatement.setInt(3, user.getCoins());
+            preparedStatement.setInt(4, user.getElo());
+            preparedStatement.setString(5, user.getUsername());
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user: " + user.getUsername(), e);
+        }
+    }
+
     private User mapToUser(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setUsername(resultSet.getString("username"));
@@ -129,6 +151,37 @@ public class UserDbRepository implements UserRepository {
         user.setToken(resultSet.getString("token"));
         user.setCoins(resultSet.getInt("coins"));
         user.setElo(resultSet.getInt("elo"));
+
+        List<Card> stack = getCardsForUser(user.getUsername(), "stacks");
+        List<Card> deck = getCardsForUser(user.getUsername(), "decks");
+
+        user.setStack(stack != null ? stack : new ArrayList<>());
+        user.setDeck(deck != null ? deck : new ArrayList<>());
+
         return user;
+    }
+
+    private List<Card> getCardsForUser(String username, String tableName) {
+        List<Card> cards = new ArrayList<>();
+        String query = String.format(SELECT_CARDS_FOR_USER, tableName);
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    cards.add(new Card(
+                            resultSet.getString("id"),
+                            resultSet.getString("name"),
+                            resultSet.getDouble("damage")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error loading cards for user: " + username, e);
+        }
+
+        return cards;
     }
 }
