@@ -1,4 +1,3 @@
-
 package at.technikum.server.util;
 
 import at.technikum.server.http.Method;
@@ -16,9 +15,17 @@ public class HttpRequestParser {
         String[] requestLineParts = requestLine.split(" ");
 
         request.setMethod(Method.valueOf(requestLineParts[0]));
-        request.setPath(requestLineParts[1]);
 
-        // parse headers
+        // Parse path and query parameters
+        String fullPath = requestLineParts[1];
+        String[] pathParts = fullPath.split("\\?", 2); // Split into path and query
+        request.setPath(pathParts[0]); // Set the path
+
+        if (pathParts.length > 1) {
+            parseQueryParameters(pathParts[1], request);
+        }
+
+        // Parse headers
         int emptyLine = 0;
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
@@ -36,7 +43,7 @@ public class HttpRequestParser {
             return request;
         }
 
-        // parse body
+        // Parse body
         StringBuilder bodyBuilder = new StringBuilder();
         for (int i = emptyLine + 1; i < lines.length; i++) {
             bodyBuilder.append(lines[i]);
@@ -49,5 +56,16 @@ public class HttpRequestParser {
         request.setBody(bodyBuilder.toString());
 
         return request;
+    }
+
+    // Helper function to parse query parameters and add them to the Request object
+    private void parseQueryParameters(String queryString, Request request) {
+        String[] params = queryString.split("&");
+        for (String param : params) {
+            String[] keyValue = param.split("=", 2);
+            String key = keyValue[0];
+            String value = keyValue.length > 1 ? keyValue[1] : ""; // Handle parameters without values
+            request.setQueryParameter(key, value);
+        }
     }
 }

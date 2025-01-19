@@ -11,7 +11,7 @@ import java.util.List;
 public class PackageDbRepository implements PackageRepository {
 
     private static final String INSERT_PACKAGE = "INSERT INTO packages (acquired_by) VALUES (NULL)";
-    private static final String SELECT_PACKAGE = "SELECT * FROM packages WHERE acquired_by IS NULL ORDER BY RANDOM() LIMIT 1";
+    private static final String SELECT_PACKAGE = "SELECT * FROM packages WHERE acquired_by IS NULL ORDER BY id LIMIT 1"; // ORDER BY RANDOM() -> für random
     private static final String UPDATE_PACKAGE_ACQUIRED_BY = "UPDATE packages SET acquired_by = ? WHERE id = ?";
     private static final String SELECT_CARDS_IN_PACKAGE = "SELECT * FROM cards WHERE package_id = ?";
     private static final String UPDATE_CARDS_WITH_USERNAME = "UPDATE cards SET username = ? WHERE package_id = ?";

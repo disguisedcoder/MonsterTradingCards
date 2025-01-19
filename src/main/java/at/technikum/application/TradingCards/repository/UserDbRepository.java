@@ -29,6 +29,8 @@ public class UserDbRepository implements UserRepository {
             "UPDATE users SET password = ?, token = ?, coins = ?, elo = ? WHERE username = ?";
     private static final String SELECT_CARDS_FOR_USER =
             "SELECT c.* FROM %s s INNER JOIN cards c ON s.card_id = c.id WHERE s.username = ?";
+    private static final String UPDATE_USER_DETAILS = "UPDATE users SET name = ?, bio = ?, image = ? WHERE username = ?";
+
 
     private final ConnectionPool connectionPool;
 
@@ -151,6 +153,9 @@ public class UserDbRepository implements UserRepository {
         user.setToken(resultSet.getString("token"));
         user.setCoins(resultSet.getInt("coins"));
         user.setElo(resultSet.getInt("elo"));
+        user.setName(resultSet.getString("name"));
+        user.setBio(resultSet.getString("bio"));
+        user.setImage(resultSet.getString("image"));
 
         List<Card> stack = getCardsForUser(user.getUsername(), "stacks");
         List<Card> deck = getCardsForUser(user.getUsername(), "decks");
@@ -183,5 +188,21 @@ public class UserDbRepository implements UserRepository {
         }
 
         return cards;
+    }
+    @Override
+    public boolean updateUserDetails(String username, String name, String bio, String image) {
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_DETAILS)
+        ) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, bio);
+            preparedStatement.setString(3, image);
+            preparedStatement.setString(4, username);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user details for: " + username, e);
+        }
     }
 }

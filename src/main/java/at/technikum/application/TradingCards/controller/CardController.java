@@ -1,7 +1,6 @@
 package at.technikum.application.TradingCards.controller;
 
 import at.technikum.application.TradingCards.DTO.CardDTO;
-import at.technikum.application.TradingCards.entity.card.Card;
 import at.technikum.application.TradingCards.service.CardService;
 import at.technikum.application.TradingCards.service.UserService;
 import at.technikum.server.http.Request;
@@ -25,10 +24,10 @@ public class CardController extends Controller {
         String path = request.getPath();
         String method = request.getMethod().name();
 
-        if ("/cards".equals(path) && "GET".equalsIgnoreCase(method)) {
-            return handleGetAllCards(request);
-        }
+        if (path.equals("/cards") && method.equals("GET")) {
+            return  handleGetAllCards(request);
 
+        }
         return json(Status.NOT_FOUND, "Endpoint not found");
     }
 
@@ -47,4 +46,20 @@ public class CardController extends Controller {
             return json(Status.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
     }
+
+    private Response handleGetDeck(Request request) {
+        try {
+            String token = userService.validateToken(request.getHeader("Authorization"));
+            List<CardDTO> deck = cardService.getDeckByToken(token);
+            return json(Status.OK, deck.isEmpty() ? "[]" : deck);
+        } catch (IllegalArgumentException e) {
+            return json(Status.UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            return json(Status.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
+        }
+    }
+
+
+
+
 }

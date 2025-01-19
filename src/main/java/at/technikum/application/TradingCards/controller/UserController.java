@@ -24,13 +24,34 @@ public class UserController extends Controller {
         String path = request.getPath();
         String method = request.getMethod().name(); // Get the HTTP method as a string
 
-        if ("/users".equals(path) && "POST".equalsIgnoreCase(method)) {
-            return handleRegister(request);
-        } else if ("/sessions".equals(path) && "POST".equalsIgnoreCase(method)) {
-            return handleLogin(request);
-        } else {
-            return json(Status.NOT_FOUND, "Endpoint not found");
+        if (path.startsWith("/users/")) {
+            String[] parts = path.split("/");
+            if (parts.length == 3) { // "/users/{username}"
+                String username = parts[2];
+                if ("GET".equalsIgnoreCase(method)) {
+                    return handleGetUser(request, username);
+                } else if ("PUT".equalsIgnoreCase(method)) {
+                    return handleUpdateUser(request, username);
+                }
+            }
         }
+
+        switch (path) {
+            case "/users":
+                if ("POST".equalsIgnoreCase(method)) {
+                    return handleRegister(request);
+                }
+                break;
+            case "/sessions":
+                if ("POST".equalsIgnoreCase(method)) {
+                    return handleLogin(request);
+                }
+                break;
+            default:
+                return json(Status.NOT_FOUND, "Endpoint not found");
+        }
+        return json(Status.NOT_FOUND, "Endpoint not found");
+
     }
 
     private Response handleRegister(Request request) {
@@ -71,5 +92,40 @@ public class UserController extends Controller {
             response.setBody(e.getMessage());
         }
         return response;
+    }
+
+    private Response handleGetUser(Request request, String username) {
+        try {
+            // Token validieren
+            String token = userService.validateToken(request.getHeader("Authorization"));
+            userService.validateAccess(token, username);
+
+            // Benutzerdaten abrufen
+            UserDTO user = userService.getUser(username);
+            return json(Status.OK, user);
+        } catch (IllegalArgumentException e) {
+            return json(Status.UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            return json(Status.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
+        }
+    }
+
+    private Response handleUpdateUser(Request request, String username) {
+        try {
+            // Token validieren und Berechtigung prüfen
+            String token = userService.validateToken(request.getHeader("Authorization"));
+            userService.validateAccess(token, username);
+
+            // Request-Body in UserDTO parsen
+            UserDTO updatedUserData = fromBody(request.getBody(), UserDTO.class);
+
+            // Benutzerdaten aktualisieren
+            userService.updateUser(username, updatedUserData);
+            return json(Status.OK, "User data updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return json(Status.UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            return json(Status.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
+        }
     }
 }

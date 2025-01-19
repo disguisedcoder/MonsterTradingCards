@@ -13,6 +13,7 @@ public class CardDTO {
         this.username = username;
     }
 
+
     // Getters
     public String getId() {
         return id;

@@ -18,4 +18,7 @@ public interface UserRepository {
 
     boolean update(User user); // New method for updating users
 
+    boolean updateUserDetails(String username, String name, String bio, String image);
+
+
 }

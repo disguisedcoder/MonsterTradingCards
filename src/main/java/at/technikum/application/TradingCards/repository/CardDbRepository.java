@@ -1,8 +1,6 @@
 package at.technikum.application.TradingCards.repository;
 
 import at.technikum.application.TradingCards.entity.card.Card;
-import at.technikum.application.TradingCards.entity.card.Element;
-import at.technikum.application.TradingCards.entity.card.MonsterType;
 import at.technikum.application.data.ConnectionPool;
 
 import java.sql.Connection;
@@ -20,6 +18,11 @@ public class CardDbRepository implements CardRepository {
     private static final String SELECT_ALL_CARDS = "SELECT * FROM cards";
     private static final String SELECT_CARDS_BY_PACKAGE_ID = "SELECT * FROM cards WHERE package_id = ?";
     private static final String SELECT_CARDS_BY_USERNAME = "SELECT * FROM cards WHERE username = ?";
+    private static final String SELECT_DECK = "SELECT * FROM cards WHERE id IN (SELECT card_id FROM decks WHERE username = ?)";
+    private static final String INSERT_DECK = "INSERT INTO decks (username, card_id) VALUES (?, ?)";
+    private static final String DELETE_DECK = "SELECT * FROM decks WHERE username = ?";
+
+
 
     public CardDbRepository(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -129,5 +132,29 @@ public class CardDbRepository implements CardRepository {
         newCard.setUsername(username);
         return newCard;
     }
+
+
+    @Override
+    public List<Card> getDeck(String username) {
+        List<Card> deck = new ArrayList<>();
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_DECK)) {
+
+            preparedStatement.setString(1, username);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    deck.add(mapToCard(resultSet)); // Verwende mapToCard, um jede Karte zu verarbeiten
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving deck for user: " + username, e);
+        }
+
+        return deck;
+    }
+
+
 
 }

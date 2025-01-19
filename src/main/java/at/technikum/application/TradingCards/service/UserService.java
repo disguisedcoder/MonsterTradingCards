@@ -79,5 +79,40 @@ public class UserService {
         }
     }
 
+    public UserDTO getUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException("User not found: " + username);
+        }
+        return new UserDTO(
+                user.getName(),
+                user.getBio(),
+                user.getImage()
+        );
+    }
+    public void updateUser(String username, UserDTO updatedUserData) {
+        User existingUser = userRepository.findByUsername(username);
+        if (existingUser == null) {
+            throw new UserNotFoundException("User not found: " + username);
+        }
 
+        // Aktualisiere die Werte im bestehenden Benutzerobjekt
+        existingUser.setName(updatedUserData.getName());
+        existingUser.setBio(updatedUserData.getBio());
+        existingUser.setImage(updatedUserData.getImage());
+
+        // Speichere die Änderungen in der Datenbank
+        userRepository.updateUserDetails(username, updatedUserData.getName(), updatedUserData.getBio(), updatedUserData.getImage());
+    }
+
+    public void validateAccess(String token, String targetUsername) {
+        User user = userRepository.findByToken(token);
+        if (user == null) {
+            throw new IllegalArgumentException("Invalid token.");
+        }
+
+        if (!user.getUsername().equals(targetUsername)) {
+            throw new IllegalArgumentException("Access denied: You are not authorized to access this resource.");
+        }
+    }
 }

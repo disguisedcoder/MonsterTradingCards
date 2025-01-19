@@ -1,15 +1,10 @@
 package at.technikum.application;
 
-import at.technikum.application.TradingCards.controller.CardController;
-import at.technikum.application.TradingCards.controller.Controller;
-import at.technikum.application.TradingCards.controller.PackageController;
-import at.technikum.application.TradingCards.controller.UserController;
+import at.technikum.application.TradingCards.controller.*;
 import at.technikum.application.TradingCards.exception.ControllerNotFoundException;
 import at.technikum.application.TradingCards.repository.*;
 import at.technikum.application.TradingCards.router.Router;
-import at.technikum.application.TradingCards.service.CardService;
-import at.technikum.application.TradingCards.service.PackageService;
-import at.technikum.application.TradingCards.service.UserService;
+import at.technikum.application.TradingCards.service.*;
 import at.technikum.application.data.ConnectionPool;
 import at.technikum.application.data.DatabaseCleaner;
 import at.technikum.server.Application;
@@ -48,16 +43,20 @@ public class MCTG_Application implements Application {
         UserRepository userRepository = new UserDbRepository(connectionPool);
         CardRepository cardRepository = new CardDbRepository(connectionPool);
         PackageRepository packageRepository = new PackageDbRepository(connectionPool);
+        DeckRepository deckRepository = new DeckDbRepository(connectionPool);
 
 
         UserService userService = new UserService(userRepository);
         CardService cardService = new CardService(cardRepository,userRepository);
         PackageService packageService = new PackageService(packageRepository, userRepository,cardService);
-
+        DeckService deckService = new DeckService(deckRepository,cardService,cardRepository);
+        BattleService battleService = new BattleService(cardRepository);
 
         PackageController packageController = new PackageController(packageService,userService);
         UserController userController = new UserController(userService);
         CardController cardController = new CardController(cardService,userService);
+        DeckController deckController = new DeckController(deckService,userService);
+        BattleController battleController = new BattleController(battleService,userService);
 
         DatabaseCleaner databaseCleaner = new DatabaseCleaner(connectionPool);
 
@@ -68,6 +67,8 @@ public class MCTG_Application implements Application {
         this.router.addRoute("/packages", packageController);
         this.router.addRoute("/transactions/packages", packageController);
         this.router.addRoute("/cards", cardController);
+        this.router.addRoute("/deck", deckController);
+
 
 
 

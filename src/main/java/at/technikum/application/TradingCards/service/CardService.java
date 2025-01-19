@@ -37,6 +37,24 @@ public class CardService {
         return cardRepository.findByUsername(user.getUsername());
     }
 
+    public List<CardDTO> getDeckByToken(String token) {
+        User user = userRepository.findByToken(token);
+        if (user == null) {
+            throw new IllegalArgumentException("Invalid token.");
+        }
+
+        List<Card> cards = cardRepository.getDeck(user.getUsername());
+
+        // Convert Cards to CardDTOs
+        List<CardDTO> cardDTOs = new ArrayList<>();
+        for (Card card : cards) {
+            cardDTOs.add(new CardDTO(card.getId(), card.getName(), card.getDamage(), card.getUsername()));
+        }
+        return cardDTOs;
+
+    }
+
+
     public List<CardDTO> getCardDTOsByUserToken(String token) {
         User user = userRepository.findByToken(token);
         if (user == null) {
@@ -51,6 +69,23 @@ public class CardService {
         }
         return cardDTOs;
     }
+
+    public List<CardDTO> getCardDTOsIdOnlyByUserToken(String token) {
+        User user = userRepository.findByToken(token);
+        if (user == null) {
+            throw new IllegalArgumentException("Invalid user token");
+        }
+        List<Card> cards = getCardsByUserToken(user);
+
+        // Convert Cards to CardDTOs
+        List<CardDTO> cardDTOs = new ArrayList<>();
+        for (Card card : cards) {
+            cardDTOs.add(new CardDTO(card.getId(), card.getName(), card.getDamage(), card.getUsername()));
+        }
+        return cardDTOs;
+    }
+
+
 
 
 }

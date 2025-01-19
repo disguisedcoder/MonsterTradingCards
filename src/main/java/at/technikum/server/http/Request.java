@@ -8,6 +8,7 @@ public class Request {
     private Method method;
     private String path;
     private final Map<String, String> header;
+    private Map<String, String> query;
     private String body;
     private String http;
 
@@ -17,6 +18,7 @@ public class Request {
 
     public Request() {
         this.header = new HashMap<>();
+        this.query = new HashMap<>();
     }
 
     public String getHeader(String name) {
@@ -54,4 +56,12 @@ public class Request {
     public void setHttp(String http) {
         this.http = http;
     }
+
+    public String getQueryParameter(String key) {
+        return this.query.get(key);
+    }
+    public void setQueryParameter(String key, String value) {
+        this.query.put(key, value);
+    }
+
 }

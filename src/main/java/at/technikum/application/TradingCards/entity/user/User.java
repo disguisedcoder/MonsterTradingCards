@@ -16,8 +16,14 @@ public class User {
     private int elo;
     private List<Card> stack;
     private List<Card> deck;
+    private String name;
+    private String bio;
+    private String image;
 
     public User(){
+        this.name ="";
+        this.bio="";
+        this.image="";
     }
 
     public User(@JsonProperty("Username") String username,
@@ -29,6 +35,9 @@ public class User {
         this.elo = 100;
         this.stack = new ArrayList<>();
         this.deck = new ArrayList<>();
+        this.name ="";
+        this.bio="";
+        this.image="";
     }
 
     private String generateToken() {
@@ -89,5 +98,29 @@ public class User {
 
     public void setDeck(List<Card> deck) {
         this.deck = deck;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

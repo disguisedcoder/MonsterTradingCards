@@ -10,4 +10,8 @@ public interface CardRepository {
     Card findById(String cardId);
     List<Card> findByUsername(String username);
     List<Card> findAll();
+
+    List<Card> getDeck(String username);
+
+
 }
