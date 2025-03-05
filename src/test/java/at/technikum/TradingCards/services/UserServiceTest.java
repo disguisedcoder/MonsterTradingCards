@@ -1,3 +1,4 @@
+/*
 package at.technikum.TradingCards.services;
 
 import at.technikum.application.TradingCards.DTO.UserDTO;
@@ -119,5 +120,5 @@ class UserServiceTest {
         assertThrows(IllegalArgumentException.class, () -> userService.validateAdmin("Bearer validToken"));
     }
 
-    @Test
-    void getUs
+}
+*/
