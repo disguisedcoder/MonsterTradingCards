@@ -1,8 +1,6 @@
 package at.technikum.application.TradingCards.repository;
 
 import at.technikum.application.TradingCards.entity.card.Card;
-import at.technikum.application.TradingCards.entity.card.Element;
-import at.technikum.application.TradingCards.entity.card.MonsterType;
 import at.technikum.application.TradingCards.entity.user.User;
 import at.technikum.application.data.ConnectionPool;
 
@@ -15,6 +13,7 @@ import java.util.List;
 
 public class UserDbRepository implements UserRepository {
 
+    private static final String UPDATE_USER_ELO = "UPDATE users SET elo = ? WHERE username = ?";
     private static final String INSERT_USER =
             "INSERT INTO users (username, password, token, coins, elo) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_USER_BY_USERNAME =
@@ -203,6 +202,17 @@ public class UserDbRepository implements UserRepository {
             return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating user details for: " + username, e);
+        }
+    }
+    @Override
+    public void updateElo(String username, int elo) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_ELO)) {
+            statement.setInt(1, elo);
+            statement.setString(2, username);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating elo for user: " + username, e);
         }
     }
 }

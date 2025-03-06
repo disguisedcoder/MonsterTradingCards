@@ -40,7 +40,7 @@ public class PackageService {
             throw new IllegalArgumentException("Invalid user token.");
         }
         if (user.getCoins() < 5) {
-            throw new IllegalStateException("Not enough coins to acquire a package.");
+            throw new IllegalStateException("Not enough money.");
         }
 
         Package pack = packageRepository.acquirePackage(user.getUsername());

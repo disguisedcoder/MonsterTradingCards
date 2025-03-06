@@ -12,7 +12,7 @@ echo.
 set "pauseFlag=1"
 for %%a in (%*) do (
     if /I "%%a"=="pause" (
-        set "pauseFlag=1"
+        set "pauseFlag=0"
     )
 )
 

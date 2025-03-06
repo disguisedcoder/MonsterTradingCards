@@ -45,14 +45,16 @@ public class MCTG_Application implements Application {
         PackageRepository packageRepository = new PackageDbRepository(connectionPool);
         DeckRepository deckRepository = new DeckDbRepository(connectionPool);
         StatsRepository statsRepository = new StatsDbRepository(connectionPool);
+        ScoreboardRepository scoreboardRepository = new ScoreboardDbRepository(connectionPool);
 
 
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository,statsRepository);
         CardService cardService = new CardService(cardRepository,userRepository);
         PackageService packageService = new PackageService(packageRepository, userRepository,cardService);
         DeckService deckService = new DeckService(deckRepository,cardService,cardRepository);
         BattleService battleService = new BattleService(cardRepository,statsRepository,userRepository,deckRepository);
         StatsService statsService = new StatsService(statsRepository,userRepository);
+        ScoreboardService scoreboardService = new ScoreboardService(scoreboardRepository);
 
         PackageController packageController = new PackageController(packageService,userService);
         UserController userController = new UserController(userService);
@@ -60,6 +62,7 @@ public class MCTG_Application implements Application {
         DeckController deckController = new DeckController(deckService,userService);
         BattleController battleController = new BattleController(battleService,userService);
         StatsController statsController = new StatsController(statsService,userService);
+        ScoreboardController scoreboardController = new ScoreboardController(scoreboardService,userService);
 
         DatabaseCleaner databaseCleaner = new DatabaseCleaner(connectionPool);
 
@@ -73,7 +76,7 @@ public class MCTG_Application implements Application {
         this.router.addRoute("/deck", deckController);
         this.router.addRoute("/battle", battleController);
         this.router.addRoute("/stats", statsController);
-        this.router.addRoute("/scoreboards", statsController);
+        this.router.addRoute("/scoreboard", scoreboardController);
 
 
 

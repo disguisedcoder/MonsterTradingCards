@@ -8,6 +8,8 @@ public interface UserRepository {
 
     User save(User user);
 
+    void updateElo(String username, int elo);
+
     List<User> findAll();
 
     User findByUsername(String username);

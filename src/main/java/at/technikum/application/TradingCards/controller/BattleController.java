@@ -39,6 +39,10 @@ public class BattleController extends Controller {
         try {
             String token = userService.validateToken(request.getHeader("Authorization"));
             battleService.addPlayerToQueue(token);
+            String battleLog = battleService.getBattleResult(token);
+            if (battleLog != null) {
+                return json(Status.OK, battleLog);
+            }
             return json(Status.OK, "Player added to the battle queue. Waiting for an opponent...");
         } catch (IllegalArgumentException e) {
             return json(Status.UNAUTHORIZED, e.getMessage());

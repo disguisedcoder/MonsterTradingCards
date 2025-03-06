@@ -4,14 +4,17 @@ import at.technikum.application.TradingCards.entity.user.User;
 import at.technikum.application.TradingCards.DTO.UserDTO;
 import at.technikum.application.TradingCards.exception.AuthenticationFailedException;
 import at.technikum.application.TradingCards.exception.UserNotFoundException;
-import at.technikum.application.TradingCards.repository.UserDbRepository;
+import at.technikum.application.TradingCards.repository.StatsRepository;
 import at.technikum.application.TradingCards.repository.UserRepository;
 
 public class UserService {
     private final UserRepository userRepository;
+    private final StatsRepository statsRepository;
 
-    public UserService(UserRepository userRepository) {
+
+    public UserService(UserRepository userRepository, StatsRepository statsRepository) {
         this.userRepository = userRepository;
+        this.statsRepository = statsRepository;
     }
 
     /**
@@ -26,6 +29,11 @@ public class UserService {
 
         // Speichern des Benutzers in der Datenbank
         userRepository.save(user);
+        // Neuen Stats-Eintrag anlegen
+        if (!user.getUsername().equals("admin")){
+            statsRepository.createStats(user.getUsername());
+        }
+
 
         // Konvertiere User zu UserDTO und gib es zurück
         return new UserDTO(

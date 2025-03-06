@@ -18,7 +18,9 @@ public class DatabaseCleaner {
                 "TRUNCATE TABLE stacks CASCADE",
                 "TRUNCATE TABLE cards CASCADE",
                 "TRUNCATE TABLE packages CASCADE",
-                "TRUNCATE TABLE users CASCADE"
+                "TRUNCATE TABLE users CASCADE",
+                "TRUNCATE TABLE stats CASCADE"
+
         };
 
         String[] resetSequences = {

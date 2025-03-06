@@ -12,6 +12,7 @@ public class StatsDbRepository implements StatsRepository {
 
     private final ConnectionPool connectionPool;
 
+    private static final String INSERT_STATS = "INSERT INTO stats (username, wins, losses, elo) VALUES (?, 0, 0, 100)";
     private static final String ADD_WIN = "UPDATE stats SET wins = wins + 1 WHERE username = ?";
     private static final String ADD_LOSS = "UPDATE stats SET losses = losses + 1 WHERE username = ?";
     private static final String UPDATE_ELO = "UPDATE stats SET elo = ? WHERE username = ?";
@@ -21,7 +22,16 @@ public class StatsDbRepository implements StatsRepository {
     public StatsDbRepository(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
-
+    @Override
+    public void createStats(String username) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(INSERT_STATS)) {
+            statement.setString(1, username);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error inserting stats for user: " + username, e);
+        }
+    }
     @Override
     public void addWin(String username) {
         try (Connection connection = connectionPool.getConnection();
