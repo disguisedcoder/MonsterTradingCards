@@ -118,7 +118,7 @@ The project is divided into various layers to maintain a clean separation of con
 ## UML
 
 Below is a high-level UML diagram illustrating the core components and their relationships:
-
+ 
 ![UML Diagram](./Semesterprojekt.jpg)
 
 You can also find the PlantUML file (`Semesterprojekt.puml`) in this project folder.
