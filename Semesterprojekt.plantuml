@@ -1,0 +1,649 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+interface Application << interface >> {
+  + handle(Request): Response
+}
+class AuthenticationFailedException {
+  + AuthenticationFailedException(String): 
+}
+class BattleController {
+  + BattleController(BattleService, UserService): 
+  - getBattleResult(Request): Response
+  + handle(Request): Response
+  - handleBattleRequest(Request): Response
+}
+class BattleService {
+  + BattleService(CardRepository, StatsRepository, UserRepository, DeckRepository): 
+  + addPlayerToQueue(String): void
+  + getBattleResult(String): String
+  - handleBattle(User, User): String
+  - loadDeck(User): ArrayList<Card>
+  - adjustElo(User, User, User): void
+}
+class BattleServiceTest {
+  ~ BattleServiceTest(): 
+  ~ getBattleResult_ShouldThrow_WhenUserNotFound(): void
+  ~ setUp(): void
+  ~ addPlayerToQueue_ShouldThrow_WhenUserNotFound(): void
+  ~ addPlayerToQueue_ShouldThrow_WhenUserHasNoDeck(): void
+  ~ battleSimulation_ShouldConductBattleAndReturnResult(): void
+}
+class Card {
+  + Card(String, String, double): 
+  - username: String
+  - element: Element
+  - name: String
+  - isMonster: boolean
+  - monsterType: MonsterType
+  - package_id: int
+  - id: String
+  - isSpell: boolean
+  - damage: double
+  + canAttack(Card): boolean
+  + toString(): String
+  - determineElement(String): Element
+  - determineMonsterType(String): MonsterType
+  + calculateDamageAgainst(Card): double
+   damage: double
+   name: String
+   isSpell: boolean
+   monsterType: MonsterType
+   package_id: int
+   username: String
+   element: Element
+   id: String
+   isMonster: boolean
+}
+class CardController {
+  + CardController(CardService, UserService): 
+  + handle(Request): Response
+  - handleGetAllCards(Request): Response
+  - handleGetDeck(Request): Response
+}
+class CardControllerTest {
+  ~ CardControllerTest(): 
+  ~ handleGetAllCards_ShouldReturnUnauthorizedForInvalidToken(): void
+  ~ setup(): void
+  ~ handleGetAllCards_ShouldReturnAllCards(): void
+  ~ handleGetAllCards_ShouldReturnErrorForUnexpectedException(): void
+}
+class CardDTO {
+  + CardDTO(String, String, double, String): 
+  - id: String
+  - damage: double
+  - name: String
+  - username: String
+   damage: double
+   name: String
+   username: String
+   id: String
+}
+class CardDbRepository {
+  + CardDbRepository(ConnectionPool): 
+  + findById(String): Card
+  + findAll(): List<Card>
+  + findByUsername(String): List<Card>
+  + save(Card): void
+  - mapToCard(ResultSet): Card
+  + findByPackageId(int): List<Card>
+  + getDeck(String): List<Card>
+}
+interface CardRepository << interface >> {
+  + findAll(): List<Card>
+  + findByUsername(String): List<Card>
+  + findById(String): Card
+  + save(Card): void
+  + getDeck(String): List<Card>
+}
+class CardService {
+  + CardService(CardRepository, UserRepository): 
+  + getCardsByUserToken(User): List<Card>
+  + getDeckByToken(String): List<CardDTO>
+  + getCardDTOsIdOnlyByUserToken(String): List<CardDTO>
+  + saveCards(List<Card>): void
+  + getCardDTOsByUserToken(String): List<CardDTO>
+   allCards: List<Card>
+}
+class CardServiceTest {
+  ~ CardServiceTest(): 
+  ~ setUp(): void
+  ~ saveCards_ShouldThrowException_WhenCardListIsEmpty(): void
+  ~ getCardDTOsIdOnlyByUserToken_ShouldThrowException_WhenTokenIsInvalid(): void
+  ~ saveCards_ShouldThrowException_WhenCardListIsNull(): void
+  ~ saveCards_ShouldSaveCards_WhenCardListIsValid(): void
+  ~ getAllCards_ShouldReturnAllCards(): void
+  ~ getCardDTOsIdOnlyByUserToken_ShouldReturnCards_WhenTokenIsValid(): void
+  ~ getCardDTOsByUserToken_ShouldThrowException_WhenTokenIsInvalid(): void
+  ~ getDeckByToken_ShouldReturnDeck_WhenTokenIsValid(): void
+  ~ getDeckByToken_ShouldThrowException_WhenTokenIsInvalid(): void
+  ~ getCardDTOsByUserToken_ShouldReturnCards_WhenTokenIsValid(): void
+}
+class CardTest {
+  ~ CardTest(): 
+  ~ canAttackSpecialRulesTest(): void
+  ~ calculateDamageAgainstTest(): void
+  ~ cardInitializationTest(): void
+}
+class ConnectionPool {
+  + ConnectionPool(): 
+  + closeConnection(Connection): void
+   connection: Connection
+}
+class Controller {
+  + Controller(): 
+  # json(Status, Object): Response
+  # fromBody(String, Class<T>): T
+  # fromBody(String, TypeReference<T>): T
+  + handle(Request): Response
+}
+class ControllerNotFoundException {
+  + ControllerNotFoundException(String): 
+}
+class DatabaseCleaner {
+  + DatabaseCleaner(ConnectionPool): 
+  + clearAllTables(): void
+}
+class DeckController {
+  + DeckController(DeckService, UserService): 
+  + handle(Request): Response
+  - handleGetDeck(Request): Response
+  - handleConfigureDeck(Request): Response
+}
+class DeckDbRepository {
+  + DeckDbRepository(ConnectionPool): 
+  + addCardsToDeck(String, List<String>): void
+  + getPlainDeck(String): List<String>
+  + clearDeck(String): void
+  + getDeck(String): List<String>
+  + hasDeck(String): boolean
+  + getUsernameFromToken(String): String
+}
+interface DeckRepository << interface >> {
+  + clearDeck(String): void
+  + getDeck(String): List<String>
+  + hasDeck(String): boolean
+  + getPlainDeck(String): List<String>
+  + addCardsToDeck(String, List<String>): void
+  + getUsernameFromToken(String): String
+}
+class DeckService {
+  + DeckService(DeckRepository, CardService, CardRepository): 
+  + configureDeck(String, List<String>): void
+  + getDeckByToken(String): List<CardDTO>
+  + getPlainDeckByToken(String): List<CardDTO>
+  + extractCardIds(List<CardDTO>): List<String>
+}
+class DeckServiceTest {
+  ~ DeckServiceTest(): 
+  ~ configureDeck_ShouldAddCardsWithoutClearing_WhenUserHasNoDeck(): void
+  ~ setUp(): void
+  ~ extractCardIds_ShouldReturnListOfIds_WhenCardDTOsProvided(): void
+  ~ getDeckByToken_ShouldReturnCardDTOs_WhenCardsAreFound(): void
+  ~ getPlainDeckByToken_ShouldReturnCardDTOs_WhenPlainDeckDataIsValid(): void
+  ~ getDeckByToken_ShouldSkipNullCards_WhenCardRepositoryReturnsNull(): void
+  ~ configureDeck_ShouldClearAndAddCards_WhenUserAlreadyHasDeck(): void
+  ~ extractCardIds_ShouldReturnEmptyList_WhenEmptyListProvided(): void
+  ~ getPlainDeckByToken_ShouldReturnEmptyList_WhenPlainDeckIsEmpty(): void
+}
+class EchoApplication {
+  + EchoApplication(): 
+  + handle(Request): Response
+}
+enum Element << enumeration >> {
+  - Element(): 
+  + values(): Element[]
+  + valueOf(String): Element
+  + isNotEffectiveAgainst(Element): boolean
+  + isEffectiveAgainst(Element): boolean
+}
+class ElementTest {
+  ~ ElementTest(): 
+  ~ isNotEffectiveAgainstTest(): void
+  ~ isEffectiveAgainstTest(): void
+}
+class EntityNotFoundException {
+  + EntityNotFoundException(String, int): 
+  + EntityNotFoundException(String): 
+}
+class HttpRequestParser {
+  + HttpRequestParser(): 
+  + parse(String): Request
+  - parseQueryParameters(String, Request): void
+}
+class HttpRequestParserTest {
+  ~ HttpRequestParserTest(): 
+  + give_httpGetRequest_then_parsePath(): void
+  + give_httpGetRequest_then_parseAuthToken(): void
+  + give_httpGetRequest_then_parseMethod(): void
+  + give_httpGetRequest_then_parseHostHeader(): void
+}
+class HttpResponseFormatter {
+  + HttpResponseFormatter(): 
+  + format(Response): String
+}
+class HttpResponseFormatterTest {
+  ~ HttpResponseFormatterTest(): 
+  + given_statusOk_when_useFormatter_then_formatStatusLineCorrectly(): void
+  + given_body_when_useFormatter_then_formatContentLengthCorrectly(): void
+  + given_body_when_useFormatter_then_formatBodyCorrectly(): void
+  + given_authenticationHeader_when_useFormatter_then_formatHeaderCorrectly(): void
+  + given_noStatus_when_useFormatter_then_noHttpStatusException(): void
+  + given_statusInternalServerError_when_useFormatter_then_formatStatusLineCorrectly(): void
+  + given_body_when_useFormatter_then_formatEmptyLineCorrectly(): void
+}
+class HttpSocket {
+  + HttpSocket(Socket): 
+  + write(String): void
+  + read(): String
+  + close(): void
+}
+class InvalidBodyException {
+  + InvalidBodyException(Throwable): 
+  + InvalidBodyException(String): 
+}
+class JsonParserException {
+  + JsonParserException(String): 
+  + JsonParserException(Throwable): 
+}
+class MCTG_Application {
+  + MCTG_Application(): 
+  - initRoutes(): void
+  + handle(Request): Response
+}
+class Main {
+  + Main(): 
+  + main(String[]): void
+}
+enum Method << enumeration >> {
+  - Method(String): 
+  - name: String
+  + values(): Method[]
+  + valueOf(String): Method
+   name: String
+}
+enum MonsterType << enumeration >> {
+  - MonsterType(): 
+  + values(): MonsterType[]
+  + valueOf(String): MonsterType
+}
+class NoHttpStatusException {
+  + NoHttpStatusException(String): 
+}
+class Package {
+  + Package(int, List<Card>): 
+  - id: int
+  - cards: List<Card>
+  + toString(): String
+   id: int
+   cards: List<Card>
+}
+class PackageController {
+  + PackageController(PackageService, UserService): 
+  + handle(Request): Response
+  - handleAcquirePackage(Request): Response
+  - handleCreatePackage(Request): Response
+}
+class PackageDbRepository {
+  + PackageDbRepository(ConnectionPool): 
+  - getGeneratedPackageId(PreparedStatement): int
+  + save(): int
+  + acquirePackage(String): Package
+  + hasPackages(): boolean
+}
+interface PackageRepository << interface >> {
+  + acquirePackage(String): Package
+  + hasPackages(): boolean
+  + save(): int
+}
+class PackageService {
+  + PackageService(PackageRepository, UserRepository, CardService): 
+  + acquirePackage(String): void
+  + createPackage(List<Card>): void
+}
+class PackageServiceTest {
+  ~ PackageServiceTest(): 
+  ~ acquirePackage_ShouldThrow_WhenUserHasNotEnoughCoins(): void
+  ~ createPackage_ShouldThrow_WhenCardsSizeNotFive(): void
+  ~ acquirePackage_ShouldAcquirePackageAndUpdateUser_WhenAllConditionsMet(): void
+  ~ acquirePackage_ShouldThrow_WhenUserNotFound(): void
+  ~ setUp(): void
+  ~ acquirePackage_ShouldThrow_WhenNoPackagesAvailable(): void
+  ~ createPackage_ShouldThrow_WhenCardsAreNull(): void
+  ~ createPackage_ShouldSavePackageAndCards_WhenCardsSizeIsFive(): void
+}
+class Request {
+  + Request(): 
+  - path: String
+  - body: String
+  - method: Method
+  - http: String
+  + getHeader(String): String
+  + setQueryParameter(String, String): void
+  + getQueryParameter(String): String
+  + setHeader(String, String): void
+   http: String
+   body: String
+   path: String
+   method: Method
+}
+class RequestHandler {
+  + RequestHandler(Socket, Application): 
+  + handle(): void
+  + run(): void
+}
+class Response {
+  + Response(): 
+  - status: Status
+  - headers: Map<String, String>
+  - body: String
+  + setHeader(String, String): void
+  + getHeader(String): String
+   body: String
+   headers: Map<String, String>
+   status: Status
+}
+class Route {
+  + Route(String, Controller): 
+  - controller: Controller
+  - route: String
+   route: String
+   controller: Controller
+}
+class Router {
+  + Router(): 
+  + addRoute(String, Controller): void
+  + getController(String): Controller
+}
+class ScoreboardController {
+  + ScoreboardController(ScoreboardService, UserService): 
+  + handle(Request): Response
+}
+class ScoreboardDbRepository {
+  + ScoreboardDbRepository(ConnectionPool): 
+   scoreboard: List<ScoreboardEntry>
+}
+class ScoreboardEntry {
+  + ScoreboardEntry(String, int): 
+  - username: String
+  - elo: int
+  + toString(): String
+   username: String
+   elo: int
+}
+interface ScoreboardRepository << interface >> {
+   scoreboard: List<ScoreboardEntry>
+}
+class ScoreboardService {
+  + ScoreboardService(ScoreboardRepository): 
+   scoreboard: List<ScoreboardEntry>
+}
+class ScoreboardServiceTest {
+  ~ ScoreboardServiceTest(): 
+  ~ getScoreboard_ShouldReturnScoreboardEntries(): void
+  ~ getScoreboard_ShouldReturnEmptyList_WhenNoEntries(): void
+  ~ setUp(): void
+}
+class Server {
+  + Server(Application): 
+  + start(): void
+}
+class SimpleHtmlApplication {
+  + SimpleHtmlApplication(): 
+  + handle(Request): Response
+}
+class StatsController {
+  + StatsController(StatsService, UserService): 
+  - handleGetStats(Request): Response
+  + handle(Request): Response
+}
+class StatsDbRepository {
+  + StatsDbRepository(ConnectionPool): 
+  + addWin(String): void
+  + getStatsByUsername(String): Object
+  + addLoss(String): void
+  + createStats(String): void
+  + incrementGamesPlayed(String): void
+  + updateElo(String, int): void
+  + addDraw(String): void
+}
+interface StatsRepository << interface >> {
+  + addWin(String): void
+  + updateElo(String, int): void
+  + addLoss(String): void
+  + incrementGamesPlayed(String): void
+  + createStats(String): void
+  + addDraw(String): void
+  + getStatsByUsername(String): Object
+}
+class StatsService {
+  + StatsService(StatsRepository, UserRepository): 
+  + getStats(String): Object
+}
+class StatsServiceTest {
+  ~ StatsServiceTest(): 
+  ~ setUp(): void
+  ~ getStats_ShouldReturnStats_WhenTokenIsValid(): void
+  ~ getStats_ShouldThrowNullPointerException_WhenUserNotFound(): void
+}
+enum Status << enumeration >> {
+  - Status(int, String): 
+  - code: int
+  - message: String
+  + values(): Status[]
+  + valueOf(String): Status
+   code: int
+   message: String
+}
+class User {
+  + User(): 
+  + User(String, String): 
+  - bio: String
+  - deck: List<Card>
+  - name: String
+  - username: String
+  - password: String
+  - coins: int
+  - elo: int
+  - token: String
+  - image: String
+  - stack: List<Card>
+  - generateToken(): String
+   name: String
+   password: String
+   deck: List<Card>
+   bio: String
+   image: String
+   token: String
+   stack: List<Card>
+   coins: int
+   username: String
+   elo: int
+}
+class UserAlreadyExistsException {
+  + UserAlreadyExistsException(String): 
+}
+class UserController {
+  + UserController(UserService): 
+  - handleLogin(Request): Response
+  + handle(Request): Response
+  - handleUpdateUser(Request, String): Response
+  - handleGetUser(Request, String): Response
+  - handleRegister(Request): Response
+}
+class UserControllerTest {
+  + UserControllerTest(): 
+}
+class UserDTO {
+  + UserDTO(): 
+  + UserDTO(String, String, int, int, String, String, String): 
+  + UserDTO(String, String, String, String, String): 
+  + UserDTO(String, String, String): 
+  + UserDTO(String, String, int, int): 
+  - name: String
+  - username: String
+  - password: String
+  - bio: String
+  - image: String
+  - elo: int
+  - coins: int
+   name: String
+   password: String
+   bio: String
+   image: String
+   coins: int
+   username: String
+   elo: int
+}
+class UserDbRepository {
+  + UserDbRepository(ConnectionPool): 
+  + findByToken(String): User
+  + delete(User): boolean
+  + updateUserDetails(String, String, String, String): boolean
+  + findAll(): List<User>
+  + findByUsername(String): User
+  - getCardsForUser(String, String): List<Card>
+  + update(User): boolean
+  - mapToUser(ResultSet): User
+  + updateElo(String, int): void
+  + save(User): User
+}
+class UserNotFoundException {
+  + UserNotFoundException(String): 
+}
+interface UserRepository << interface >> {
+  + updateUserDetails(String, String, String, String): boolean
+  + save(User): User
+  + updateElo(String, int): void
+  + delete(User): boolean
+  + findByToken(String): User
+  + findAll(): List<User>
+  + findByUsername(String): User
+  + update(User): boolean
+}
+class UserService {
+  + UserService(UserRepository, StatsRepository): 
+  + authenticate(UserDTO): String
+  + updateUser(String, UserDTO): void
+  + validateToken(String): String
+  + getUser(String): UserDTO
+  + validateAccess(String, String): void
+  + createUser(User): UserDTO
+  + validateAdmin(String): void
+}
+class UserServiceTest {
+  ~ UserServiceTest(): 
+  ~ createUser_ShouldNotCallCreateStats_WhenUserIsAdmin(): void
+  ~ updateUser_ShouldThrowUserNotFoundException_WhenUserDoesNotExist(): void
+  ~ validateAccess_ShouldThrow_WhenUserTokenDoesNotMatchTargetUsername(): void
+  ~ validateToken_ShouldThrowException_WhenUserIsNull(): void
+  ~ authenticate_ShouldReturnToken_WhenCredentialsAreValid(): void
+  ~ authenticate_ShouldThrowAuthenticationFailedException_WhenPasswordIsWrong(): void
+  ~ validateToken_ShouldThrowException_WhenHeaderIsNullOrMissingBearer(): void
+  ~ validateAdmin_ShouldThrow_WhenUserIsNotAdmin(): void
+  ~ validateToken_ShouldReturnToken_WhenHeaderIsValidAndUserExists(): void
+  ~ updateUser_ShouldUpdateUser_WhenUserExists(): void
+  ~ createUser_ShouldCreateAndReturnUserDTO_WhenUserDoesNotExist(): void
+  ~ setUp(): void
+  ~ getUser_ShouldThrowUserNotFoundException_WhenUserNotFound(): void
+  ~ authenticate_ShouldThrowUserNotFoundException_WhenUserDoesNotExist(): void
+  ~ getUser_ShouldReturnUserDTO_WhenUserExists(): void
+  ~ createUser_ShouldThrowException_WhenUsernameAlreadyExists(): void
+  ~ validateAccess_ShouldThrow_WhenTokenIsInvalid(): void
+  ~ validateAdmin_ShouldNotThrow_WhenUserIsAdmin(): void
+  ~ validateAccess_ShouldNotThrow_WhenTokenValidAndUsernameMatches(): void
+}
+
+BattleController              "1" *-[#595959,plain]-> "battleService\n1" BattleService                 
+BattleController               -[#000082,plain]-^  Controller                    
+BattleController              "1" *-[#595959,plain]-> "userService\n1" UserService                   
+BattleService                 "1" *-[#595959,plain]-> "cardRepository\n1" CardRepository                
+BattleService                 "1" *-[#595959,plain]-> "deckRepository\n1" DeckRepository                
+BattleService                 "1" *-[#595959,plain]-> "statsRepository\n1" StatsRepository               
+BattleService                 "1" *-[#595959,plain]-> "requestQueue\n*" User                          
+BattleService                 "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+Card                          "1" *-[#595959,plain]-> "element\n1" Element                       
+Card                          "1" *-[#595959,plain]-> "monsterType\n1" MonsterType                   
+CardController                "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+CardController                 -[#000082,plain]-^  Controller                    
+CardController                "1" *-[#595959,plain]-> "userService\n1" UserService                   
+CardControllerTest            "1" *-[#595959,plain]-> "cardController\n1" CardController                
+CardControllerTest            "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+CardControllerTest            "1" *-[#595959,plain]-> "userService\n1" UserService                   
+CardDbRepository               -[#008200,dashed]-^  CardRepository                
+CardDbRepository              "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+CardService                   "1" *-[#595959,plain]-> "cardRepository\n1" CardRepository                
+CardService                   "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+CardServiceTest               "1" *-[#595959,plain]-> "cardRepository\n1" CardRepository                
+CardServiceTest               "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+CardServiceTest               "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+DatabaseCleaner               "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+DeckController                 -[#000082,plain]-^  Controller                    
+DeckController                "1" *-[#595959,plain]-> "deckService\n1" DeckService                   
+DeckController                "1" *-[#595959,plain]-> "userService\n1" UserService                   
+DeckDbRepository              "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+DeckDbRepository               -[#008200,dashed]-^  DeckRepository                
+DeckService                   "1" *-[#595959,plain]-> "cardRepository\n1" CardRepository                
+DeckService                   "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+DeckService                   "1" *-[#595959,plain]-> "deckRepository\n1" DeckRepository                
+DeckServiceTest               "1" *-[#595959,plain]-> "cardRepository\n1" CardRepository                
+DeckServiceTest               "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+DeckServiceTest               "1" *-[#595959,plain]-> "deckRepository\n1" DeckRepository                
+DeckServiceTest               "1" *-[#595959,plain]-> "deckService\n1" DeckService                   
+EchoApplication                -[#008200,dashed]-^  Application                   
+HttpRequestParserTest         "1" *-[#595959,plain]-> "requestParser\n1" HttpRequestParser             
+HttpResponseFormatterTest     "1" *-[#595959,plain]-> "httpResponseFormatter\n1" HttpResponseFormatter         
+MCTG_Application               -[#008200,dashed]-^  Application                   
+MCTG_Application              "1" *-[#595959,plain]-> "router\n1" Router                        
+Package                       "1" *-[#595959,plain]-> "cards\n*" Card                          
+PackageController              -[#000082,plain]-^  Controller                    
+PackageController             "1" *-[#595959,plain]-> "packageService\n1" PackageService                
+PackageController             "1" *-[#595959,plain]-> "userService\n1" UserService                   
+PackageDbRepository           "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+PackageDbRepository            -[#008200,dashed]-^  PackageRepository             
+PackageService                "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+PackageService                "1" *-[#595959,plain]-> "packageRepository\n1" PackageRepository             
+PackageService                "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+PackageServiceTest            "1" *-[#595959,plain]-> "cardService\n1" CardService                   
+PackageServiceTest            "1" *-[#595959,plain]-> "packageRepository\n1" PackageRepository             
+PackageServiceTest            "1" *-[#595959,plain]-> "packageService\n1" PackageService                
+PackageServiceTest            "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+Request                       "1" *-[#595959,plain]-> "method\n1" Method                        
+RequestHandler                "1" *-[#595959,plain]-> "application\n1" Application                   
+Response                      "1" *-[#595959,plain]-> "status\n1" Status                        
+Route                         "1" *-[#595959,plain]-> "controller\n1" Controller                    
+Router                        "1" *-[#595959,plain]-> "routes\n*" Route                         
+ScoreboardController           -[#000082,plain]-^  Controller                    
+ScoreboardController          "1" *-[#595959,plain]-> "scoreboardService\n1" ScoreboardService             
+ScoreboardController          "1" *-[#595959,plain]-> "userService\n1" UserService                   
+ScoreboardDbRepository        "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+ScoreboardDbRepository         -[#008200,dashed]-^  ScoreboardRepository          
+ScoreboardService             "1" *-[#595959,plain]-> "scoreboardRepository\n1" ScoreboardRepository          
+ScoreboardServiceTest         "1" *-[#595959,plain]-> "scoreboardRepository\n1" ScoreboardRepository          
+ScoreboardServiceTest         "1" *-[#595959,plain]-> "scoreboardService\n1" ScoreboardService             
+Server                        "1" *-[#595959,plain]-> "application\n1" Application                   
+SimpleHtmlApplication          -[#008200,dashed]-^  Application                   
+StatsController                -[#000082,plain]-^  Controller                    
+StatsController               "1" *-[#595959,plain]-> "statsService\n1" StatsService                  
+StatsController               "1" *-[#595959,plain]-> "userService\n1" UserService                   
+StatsDbRepository             "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+StatsDbRepository              -[#008200,dashed]-^  StatsRepository               
+StatsService                  "1" *-[#595959,plain]-> "statsRepository\n1" StatsRepository               
+StatsService                  "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+StatsServiceTest              "1" *-[#595959,plain]-> "statsRepository\n1" StatsRepository               
+StatsServiceTest              "1" *-[#595959,plain]-> "statsService\n1" StatsService                  
+StatsServiceTest              "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+User                          "1" *-[#595959,plain]-> "stack\n*" Card                          
+UserController                 -[#000082,plain]-^  Controller                    
+UserController                "1" *-[#595959,plain]-> "userService\n1" UserService                   
+UserDbRepository              "1" *-[#595959,plain]-> "connectionPool\n1" ConnectionPool                
+UserDbRepository               -[#008200,dashed]-^  UserRepository                
+UserService                   "1" *-[#595959,plain]-> "statsRepository\n1" StatsRepository               
+UserService                   "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+UserServiceTest               "1" *-[#595959,plain]-> "statsRepository\n1" StatsRepository               
+UserServiceTest               "1" *-[#595959,plain]-> "userRepository\n1" UserRepository                
+UserServiceTest               "1" *-[#595959,plain]-> "userService\n1" UserService                   
+@enduml
