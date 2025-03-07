@@ -54,9 +54,12 @@ CREATE TABLE IF NOT EXISTS tradings (
                                         minimum_damage DOUBLE PRECISION NOT NULL,
                                         offered_by VARCHAR(255) NOT NULL REFERENCES users(username) ON DELETE CASCADE
 );
-CREATE TABLE stats (
+CREATE TABLE IF NOT EXISTS stats(
                        username VARCHAR(255) PRIMARY KEY,
                        wins INT DEFAULT 0,
                        losses INT DEFAULT 0,
+                       draws INT DEFAULT 0,
+                       games_played INT DEFAULT 0,
                        elo INT DEFAULT 100 -- Standard-Elo
 );
+

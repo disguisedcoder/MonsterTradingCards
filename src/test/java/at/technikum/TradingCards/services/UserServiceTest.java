@@ -4,7 +4,7 @@ import at.technikum.application.TradingCards.DTO.UserDTO;
 import at.technikum.application.TradingCards.entity.user.User;
 import at.technikum.application.TradingCards.exception.AuthenticationFailedException;
 import at.technikum.application.TradingCards.exception.UserNotFoundException;
-import at.technikum.application.TradingCards.repository.StatsDbRepository;
+import at.technikum.application.TradingCards.repository.StatsRepository;
 import at.technikum.application.TradingCards.repository.UserRepository;
 import at.technikum.application.TradingCards.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,14 +16,14 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     private UserRepository userRepository;
+    private StatsRepository statsRepository;
     private UserService userService;
-    private StatsDbRepository statsDbRepository;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
-        statsDbRepository = mock(StatsDbRepository.class);
-        userService = new UserService(userRepository,statsDbRepository);
+        statsRepository = mock(StatsRepository.class);
+        userService = new UserService(userRepository, statsRepository);
     }
 
     @Test
@@ -39,6 +39,25 @@ class UserServiceTest {
         assertEquals("newUser", result.getUsername());
         assertEquals("password", result.getPassword());
         verify(userRepository, times(1)).save(newUser);
+        // Verify that stats creation is invoked for non-admin users
+        verify(statsRepository, times(1)).createStats("newUser");
+    }
+
+    @Test
+    void createUser_ShouldNotCallCreateStats_WhenUserIsAdmin() {
+        // Arrange
+        User adminUser = new User("admin", "adminPass");
+        when(userRepository.findByUsername("admin")).thenReturn(null);
+
+        // Act
+        UserDTO result = userService.createUser(adminUser);
+
+        // Assert
+        assertEquals("admin", result.getUsername());
+        assertEquals("adminPass", result.getPassword());
+        verify(userRepository, times(1)).save(adminUser);
+        // Admin should not trigger stats creation
+        verify(statsRepository, never()).createStats(anyString());
     }
 
     @Test
@@ -60,10 +79,9 @@ class UserServiceTest {
     @Test
     void authenticate_ShouldReturnToken_WhenCredentialsAreValid() {
         // Arrange
-        UserDTO userDTO = new UserDTO("testUser", "testPass", 0, 0);  // Using (username, password, elo, coins)
+        UserDTO userDTO = new UserDTO("testUser", "testPass", 0, 0);  // (username, password, elo, coins)
         User mockUser = new User("testUser", "testPass");
         mockUser.setToken("validToken");
-
         when(userRepository.findByUsername("testUser")).thenReturn(mockUser);
 
         // Act
@@ -93,7 +111,6 @@ class UserServiceTest {
         // Arrange
         UserDTO userDTO = new UserDTO("testUser", "wrongPass", 0, 0);
         User mockUser = new User("testUser", "correctPass");
-
         when(userRepository.findByUsername("testUser")).thenReturn(mockUser);
 
         // Act & Assert
@@ -216,7 +233,7 @@ class UserServiceTest {
         User existingUser = new User("testUser", "pass");
         when(userRepository.findByUsername("testUser")).thenReturn(existingUser);
 
-        UserDTO updated = new UserDTO();  // Using no-arg constructor
+        UserDTO updated = new UserDTO();  // Assuming a no-arg constructor exists
         updated.setName("New Name");
         updated.setBio("New Bio");
         updated.setImage("New Image");

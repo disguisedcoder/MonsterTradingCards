@@ -24,9 +24,7 @@ public class StatsController extends Controller {
         if ("GET".equalsIgnoreCase(method)) {
             if (path.equals("/stats")) {
                 return handleGetStats(request);
-            } else if (path.equals("/scoreboard")) {
-                return handleGetScoreboard(request);
-            }
+            } 
         }
 
         return json(Status.NOT_FOUND, "Endpoint not found");
@@ -42,12 +40,5 @@ public class StatsController extends Controller {
         }
     }
 
-    private Response handleGetScoreboard(Request request) {
-        try {
-            var scoreboard = statsService.getScoreboard();
-            return json(Status.OK, scoreboard);
-        } catch (Exception e) {
-            return json(Status.INTERNAL_SERVER_ERROR, "An error occurred while retrieving the scoreboard.");
-        }
-    }
+
 }

@@ -5,8 +5,6 @@ import at.technikum.application.data.ConnectionPool;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 public class StatsDbRepository implements StatsRepository {
 
@@ -16,8 +14,10 @@ public class StatsDbRepository implements StatsRepository {
     private static final String ADD_WIN = "UPDATE stats SET wins = wins + 1 WHERE username = ?";
     private static final String ADD_LOSS = "UPDATE stats SET losses = losses + 1 WHERE username = ?";
     private static final String UPDATE_ELO = "UPDATE stats SET elo = ? WHERE username = ?";
-    private static final String GET_STATS_BY_USERNAME = "SELECT username, wins, losses, elo FROM stats WHERE username = ?";
-    private static final String GET_SCOREBOARD = "SELECT username, wins, losses, elo FROM stats ORDER BY wins DESC, losses ASC";
+    private static final String GET_STATS_BY_USERNAME = "SELECT username, wins, losses, draws, games_played, elo FROM stats WHERE username = ?";
+    private static final String INCREMENT_GAMES_PLAYED = "UPDATE stats SET games_played = games_played + 1 WHERE username = ?";
+    private static final String ADD_DRAW = "UPDATE stats SET draws = draws + 1 WHERE username = ?";
+
 
     public StatsDbRepository(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -77,6 +77,8 @@ public class StatsDbRepository implements StatsRepository {
                         public final String username = rs.getString("username");
                         public final int wins = rs.getInt("wins");
                         public final int losses = rs.getInt("losses");
+                        public final int draws = rs.getInt("draws");
+                        public final int gamesPlayed = rs.getInt("games_played");
                         public final int elo = rs.getInt("elo");
                     };
                 }
@@ -88,22 +90,23 @@ public class StatsDbRepository implements StatsRepository {
     }
 
     @Override
-    public List<Object> getScoreboard() {
-        List<Object> scoreboard = new ArrayList<>();
+    public void incrementGamesPlayed(String username) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(GET_SCOREBOARD);
-             ResultSet rs = statement.executeQuery()) {
-            while (rs.next()) {
-                scoreboard.add(new Object() {
-                    public final String username = rs.getString("username");
-                    public final int wins = rs.getInt("wins");
-                    public final int losses = rs.getInt("losses");
-                    public final int elo = rs.getInt("elo");
-                });
-            }
+             PreparedStatement ps = connection.prepareStatement(INCREMENT_GAMES_PLAYED)) {
+            ps.setString(1, username);
+            ps.executeUpdate();
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving scoreboard.", e);
+            throw new RuntimeException("Error updating games played for " + username, e);
         }
-        return scoreboard;
+    }
+    @Override
+    public void addDraw(String username) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(ADD_DRAW)) {
+            ps.setString(1, username);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating draw for " + username, e);
+        }
     }
 }

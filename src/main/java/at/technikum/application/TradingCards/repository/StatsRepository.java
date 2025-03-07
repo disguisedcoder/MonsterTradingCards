@@ -14,5 +14,9 @@ public interface StatsRepository {
 
     Object getStatsByUsername(String username);
 
-    List<Object> getScoreboard();
+    void addDraw(String username);
+
+    void incrementGamesPlayed(String username);
+
+
 }

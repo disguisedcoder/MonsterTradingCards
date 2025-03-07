@@ -131,4 +131,33 @@ class CardServiceTest {
         assertEquals("Invalid user token", exception.getMessage());
         verifyNoInteractions(cardRepository);
     }
+
+    @Test
+    void getCardDTOsIdOnlyByUserToken_ShouldReturnCards_WhenTokenIsValid() {
+        User mockUser = new User("testUser", "password");
+        when(userRepository.findByToken("validToken")).thenReturn(mockUser);
+
+        List<Card> mockCards = Arrays.asList(
+                new Card("1", "WaterGoblin", 10),
+                new Card("2", "FireSpell", 20)
+        );
+        when(cardRepository.findByUsername(mockUser.getUsername())).thenReturn(mockCards);
+
+        List<CardDTO> result = cardService.getCardDTOsIdOnlyByUserToken("validToken");
+
+        assertEquals(2, result.size());
+        assertEquals("WaterGoblin", result.get(0).getName());
+        verify(cardRepository, times(1)).findByUsername(mockUser.getUsername());
+    }
+
+    @Test
+    void getCardDTOsIdOnlyByUserToken_ShouldThrowException_WhenTokenIsInvalid() {
+        when(userRepository.findByToken("invalidToken")).thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> cardService.getCardDTOsIdOnlyByUserToken("invalidToken"));
+
+        assertEquals("Invalid user token", exception.getMessage());
+        verifyNoInteractions(cardRepository);
+    }
 }

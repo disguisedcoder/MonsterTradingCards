@@ -31,13 +31,8 @@ class PackageServiceTest {
         packageService = new PackageService(packageRepository, userRepository, cardService);
     }
 
-    // ----------------------------------------------------------------
-    // createPackage(List<Card>)
-    // ----------------------------------------------------------------
-
     @Test
     void createPackage_ShouldThrow_WhenCardsAreNull() {
-        // Act & Assert
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
                 () -> packageService.createPackage(null)
@@ -49,15 +44,12 @@ class PackageServiceTest {
 
     @Test
     void createPackage_ShouldThrow_WhenCardsSizeNotFive() {
-        // Arrange
         List<Card> fourCards = List.of(
                 new Card("1", "Card1", 10),
                 new Card("2", "Card2", 20),
                 new Card("3", "Card3", 30),
                 new Card("4", "Card4", 40)
         );
-
-        // Act & Assert
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
                 () -> packageService.createPackage(fourCards)
@@ -69,7 +61,6 @@ class PackageServiceTest {
 
     @Test
     void createPackage_ShouldSavePackageAndCards_WhenCardsSizeIsFive() {
-        // Arrange
         List<Card> fiveCards = List.of(
                 new Card("1", "Card1", 10),
                 new Card("2", "Card2", 20),
@@ -77,15 +68,12 @@ class PackageServiceTest {
                 new Card("4", "Card4", 40),
                 new Card("5", "Card5", 50)
         );
-
         when(packageRepository.save()).thenReturn(101);
 
-        // Act
         packageService.createPackage(fiveCards);
 
-        // Assert
         verify(packageRepository, times(1)).save();
-        // Each card should get package_id=101
+        // Verify that each card gets the package ID assigned
         for (Card card : fiveCards) {
             assertEquals(101, card.getPackage_id());
         }
@@ -96,10 +84,8 @@ class PackageServiceTest {
 
     @Test
     void acquirePackage_ShouldThrow_WhenUserNotFound() {
-        // Arrange
         when(userRepository.findByToken("invalidToken")).thenReturn(null);
 
-        // Act & Assert
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
                 () -> packageService.acquirePackage("invalidToken")
@@ -110,31 +96,26 @@ class PackageServiceTest {
 
     @Test
     void acquirePackage_ShouldThrow_WhenUserHasNotEnoughCoins() {
-        // Arrange
         User userWithFewCoins = new User("userA", "pass");
-        userWithFewCoins.setCoins(4); // less than 5
+        userWithFewCoins.setCoins(4); // Less than the required 5 coins
         when(userRepository.findByToken("someToken")).thenReturn(userWithFewCoins);
 
-        // Act & Assert
         IllegalStateException ex = assertThrows(
                 IllegalStateException.class,
                 () -> packageService.acquirePackage("someToken")
         );
-        assertTrue(ex.getMessage().contains("Not enough money"));
+        assertTrue(ex.getMessage().contains("Not enough money."));
         verifyNoInteractions(packageRepository);
     }
 
     @Test
     void acquirePackage_ShouldThrow_WhenNoPackagesAvailable() {
-        // Arrange
         User user = new User("userA", "pass");
         user.setCoins(10);
         when(userRepository.findByToken("validToken")).thenReturn(user);
-
-        // No package returned means none available
+        // Simulate no package available
         when(packageRepository.acquirePackage("userA")).thenReturn(null);
 
-        // Act & Assert
         IllegalStateException ex = assertThrows(
                 IllegalStateException.class,
                 () -> packageService.acquirePackage("validToken")
@@ -148,7 +129,6 @@ class PackageServiceTest {
 
     @Test
     void acquirePackage_ShouldAcquirePackageAndUpdateUser_WhenAllConditionsMet() {
-        // Arrange
         User user = new User("userA", "pass");
         user.setCoins(10);
         user.setStack(new ArrayList<>());
@@ -162,22 +142,17 @@ class PackageServiceTest {
         when(userRepository.findByToken("validToken")).thenReturn(user);
         when(packageRepository.acquirePackage("userA")).thenReturn(pack);
 
-        // Act
         packageService.acquirePackage("validToken");
 
-        // Assert
-        // 1) User coins decreased by 5
+        // Verify that coins have been deducted by 5
         assertEquals(5, user.getCoins());
-        // 2) Cards added to user stack
+        // Verify that the cards from the package have been added to the user's stack
         assertEquals(2, user.getStack().size());
         assertEquals("Card1", user.getStack().get(0).getName());
 
-        // Verify calls
         verify(userRepository, times(1)).findByToken("validToken");
         verify(packageRepository, times(1)).acquirePackage("userA");
         verify(userRepository, times(1)).update(user);
-
-        // No other calls on these mocks
         verifyNoMoreInteractions(packageRepository);
         verifyNoMoreInteractions(userRepository);
     }
